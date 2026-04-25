@@ -139,7 +139,7 @@ export function applyAtmosphereUpdates(world: World, updates: Update[], registry
 
 export function seedAtmosphere(world: World, rng: RNG): World {
   const next = cloneWorld(world);
-  const target = 4 + rng.int(3);
+  const target = 6 + rng.int(4);
   let placed = 0;
   let attempts = 0;
   while (placed < target && attempts < 200) {

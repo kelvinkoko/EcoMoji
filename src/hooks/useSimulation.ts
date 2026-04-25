@@ -7,7 +7,7 @@ import { clearAt, createWorld, placeAt } from '../game/world';
 import { countPopulations, evaluateEnd, type PopCounts } from '../game/endConditions';
 import { applySeed } from '../game/seed';
 
-const TICK_MS = 2000;
+const TICK_MS = 1200;
 
 export interface SimState {
   world: World;

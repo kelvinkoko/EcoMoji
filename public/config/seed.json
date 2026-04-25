@@ -6,19 +6,19 @@
   ],
   "rocks": 6,
   "plantsNearWater": [
-    { "speciesId": "sapling", "count": 12 },
-    { "speciesId": "bush", "count": 5 }
+    { "speciesId": "sapling", "count": 20 },
+    { "speciesId": "bush", "count": 9 }
   ],
   "scatter": [
-    { "speciesId": "flower", "count": 10 },
-    { "speciesId": "mushroom", "count": 6 },
-    { "speciesId": "rabbit", "count": 5 },
-    { "speciesId": "mouse", "count": 5 },
-    { "speciesId": "snail", "count": 3 },
-    { "speciesId": "deer", "count": 2 },
-    { "speciesId": "turtle", "count": 2 },
-    { "speciesId": "fox", "count": 1 },
-    { "speciesId": "snake", "count": 1 },
-    { "speciesId": "bear", "count": 1 }
+    { "speciesId": "flower", "count": 18 },
+    { "speciesId": "mushroom", "count": 10 },
+    { "speciesId": "rabbit", "count": 9 },
+    { "speciesId": "mouse", "count": 9 },
+    { "speciesId": "snail", "count": 6 },
+    { "speciesId": "deer", "count": 4 },
+    { "speciesId": "turtle", "count": 4 },
+    { "speciesId": "fox", "count": 2 },
+    { "speciesId": "snake", "count": 2 },
+    { "speciesId": "bear", "count": 2 }
   ]
 }
