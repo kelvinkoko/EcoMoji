@@ -100,6 +100,7 @@ code { background: #21333a; padding: 1px 4px; border-radius: 3px; }
 }
 .tool-list { display: flex; flex-direction: column; gap: 4px; }
 .tool {
+  position: relative;
   display: flex; align-items: center; gap: 8px;
   text-align: left; padding: 6px 10px;
   background: #1a2c33; border: 1px solid #2d4a55;
@@ -107,6 +108,39 @@ code { background: #21333a; padding: 1px 4px; border-radius: 3px; }
 }
 .tool-emoji { font-size: 20px; }
 .tool-erase { width: 100%; }
+
+/* hover tooltip on palette buttons */
+.tool-tip {
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 180px;
+  max-width: 260px;
+  padding: 8px 10px;
+  background: #0f1a1f;
+  border: 1px solid #2d4a55;
+  border-radius: 6px;
+  color: #c8dccd;
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: left;
+  white-space: normal;
+  display: none;
+  z-index: 30;
+  pointer-events: none;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+}
+.tool-tip-title {
+  display: block;
+  font-weight: 600;
+  color: #e7f0e9;
+  margin-bottom: 4px;
+}
+.tool-tip-line { display: block; }
+.tool-tip-line + .tool-tip-line { margin-top: 2px; }
+.tool:hover .tool-tip,
+.tool:focus-visible .tool-tip { display: block; }
 
 /* grid */
 .grid-wrap {
