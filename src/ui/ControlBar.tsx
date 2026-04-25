@@ -1,9 +1,9 @@
-import type { ModeDef } from '../game/types';
+import type { ModeDef, World } from '../game/types';
 
 interface Props {
   mode: ModeDef;
   day: number;
-  weather: 'sun' | 'rain';
+  weather: World['weather'];
   paused: boolean;
   speed: number;
   onTogglePause: () => void;
@@ -12,6 +12,19 @@ interface Props {
   onReset: () => void;
   onExit: () => void;
 }
+
+const WEATHER_EMOJI: Record<World['weather'], string> = {
+  sun: '☀️',
+  clouds: '☁️',
+  rain: '🌧️',
+  storm: '⛈️',
+};
+const WEATHER_LABEL: Record<World['weather'], string> = {
+  sun: 'Sunny',
+  clouds: 'Cloudy',
+  rain: 'Raining — lakes may grow',
+  storm: 'Storm — lightning may strike',
+};
 
 export function ControlBar(p: Props) {
   return (
@@ -33,8 +46,8 @@ export function ControlBar(p: Props) {
           </button>
         ))}
       </div>
-      <div className="control-day">
-        Day {p.day} {p.weather === 'rain' ? '🌧️' : '☀️'}
+      <div className="control-day" title={WEATHER_LABEL[p.weather]}>
+        Day {p.day} {WEATHER_EMOJI[p.weather]}
       </div>
       <button onClick={p.onReset}>🔄 Reset</button>
     </header>

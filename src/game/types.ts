@@ -94,7 +94,7 @@ export interface World {
   radius: number;
   tiles: (Tile | null)[];
   day: number;
-  weather: 'sun' | 'rain';
+  weather: 'sun' | 'clouds' | 'rain' | 'storm';
 }
 
 export type Update =
@@ -104,7 +104,8 @@ export type Update =
   | { kind: 'setEnergy'; pos: Pos; energy: number }
   | { kind: 'setAge'; pos: Pos; age: number }
   | { kind: 'transform'; pos: Pos; speciesId: string }
-  | { kind: 'setTerrain'; pos: Pos; terrain: Terrain };
+  | { kind: 'setTerrain'; pos: Pos; terrain: Terrain }
+  | { kind: 'ignite'; pos: Pos; speciesId: string; energy?: number };
 
 export interface EndState {
   ended: boolean;

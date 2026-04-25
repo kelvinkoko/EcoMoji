@@ -45,9 +45,14 @@ export function describeSpecies(def: SpeciesDef, registry: Registry): string[] {
       if (def.terrain === 'water') {
         lines.push('Water tile');
         lines.push('Plants thrive at the edges');
+        lines.push('Grows during rain');
       } else if (def.terrain === 'rock') {
         lines.push('Rock tile');
         lines.push('Nothing can live on it');
+      } else if (def.id === 'fire') {
+        lines.push('Burns plants and spreads to neighbors');
+        lines.push('Started by lightning during storms');
+        lines.push('Rain puts it out faster');
       }
       break;
     }

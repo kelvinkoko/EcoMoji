@@ -18,5 +18,16 @@
     "placeable": true,
     "blocksPlacement": true,
     "terrain": "rock"
+  },
+  {
+    "id": "fire",
+    "emoji": "🔥",
+    "label": "Fire",
+    "group": "environment",
+    "role": "environment",
+    "placeable": true,
+    "energyStart": 5,
+    "lifespan": 8,
+    "behaviors": ["fire-spread"]
   }
 ]

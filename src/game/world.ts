@@ -130,6 +130,19 @@ export function applyUpdates(world: World, updates: Update[], registry: Registry
         if (u.terrain !== 'grass') t.creature = undefined;
         break;
       }
+      case 'ignite': {
+        const t = next.tiles[idx(next.radius, u.pos.q, u.pos.r)];
+        if (!t || t.terrain !== 'grass') break;
+        if (!touch(u.pos)) break;
+        const def = registry.species(u.speciesId);
+        if (!def) break;
+        t.creature = {
+          speciesId: u.speciesId,
+          energy: u.energy ?? def.energyStart ?? 4,
+          age: 0,
+        };
+        break;
+      }
     }
   }
 

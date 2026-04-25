@@ -172,6 +172,41 @@ export const consumerBehavior: Behavior = (ctx) => {
 
 export const environmentBehavior: Behavior = () => [];
 
+const fireSpread: Behavior = (ctx) => {
+  const updates: Update[] = [];
+  const tile = getTile(ctx.world, ctx.pos.q, ctx.pos.r);
+  if (!tile?.creature) return updates;
+  const wet = ctx.world.weather === 'rain' || ctx.world.weather === 'storm';
+  const decay = wet ? 2 : 1;
+  const energy = tile.creature.energy - decay;
+  if (energy <= 0) {
+    updates.push({ kind: 'remove', pos: ctx.pos });
+    return updates;
+  }
+  updates.push({ kind: 'setEnergy', pos: ctx.pos, energy });
+
+  const spreadChance = wet ? 0.12 : 0.4;
+  if (ctx.rng.chance(spreadChance)) {
+    const flammable: Pos[] = [];
+    for (const n of neighbors(ctx.world, ctx.pos)) {
+      const nt = getTile(ctx.world, n.q, n.r);
+      if (!nt || nt.terrain !== 'grass') continue;
+      if (ctx.occupiedNext.has(idx(ctx.world.radius, n.q, n.r))) continue;
+      if (!nt.creature) continue;
+      const ndef = ctx.registry.species(nt.creature.speciesId);
+      if (ndef?.role === 'producer') flammable.push(n);
+    }
+    const target = ctx.rng.pick(flammable);
+    if (target) {
+      ctx.occupiedNext.add(idx(ctx.world.radius, target.q, target.r));
+      updates.push({ kind: 'ignite', pos: target, speciesId: 'fire', energy: 4 });
+    }
+  }
+  return updates;
+};
+
+registerBehavior('fire-spread', fireSpread);
+
 export function behaviorForRole(role: 'producer' | 'consumer' | 'environment'): Behavior {
   switch (role) {
     case 'producer':
