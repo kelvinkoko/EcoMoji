@@ -1,0 +1,43 @@
+[
+  {
+    "id": "sapling",
+    "emoji": "🌱",
+    "label": "Sapling",
+    "group": "plant",
+    "role": "producer",
+    "placeable": true,
+    "needs": { "sun": true, "waterNeighbor": true },
+    "spreadChance": 0.04,
+    "matureAge": 6,
+    "growsInto": "bush",
+    "energyStart": 2,
+    "lifespan": 80
+  },
+  {
+    "id": "bush",
+    "emoji": "🌿",
+    "label": "Bush",
+    "group": "plant",
+    "role": "producer",
+    "placeable": true,
+    "needs": { "sun": true, "waterNeighbor": true },
+    "spreadChance": 0.06,
+    "matureAge": 12,
+    "growsInto": "tree",
+    "energyStart": 4,
+    "lifespan": 120
+  },
+  {
+    "id": "tree",
+    "emoji": "🌳",
+    "label": "Tree",
+    "group": "plant",
+    "role": "producer",
+    "placeable": true,
+    "needs": { "sun": true, "waterNeighbor": true },
+    "spreadChance": 0.05,
+    "matureAge": 20,
+    "energyStart": 6,
+    "lifespan": 200
+  }
+]

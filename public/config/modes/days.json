@@ -1,0 +1,7 @@
+{
+  "id": "days",
+  "label": "Days Survived",
+  "description": "Last as long as you can. Game ends when all life is extinct.",
+  "endWhen": { "allLifeExtinct": true },
+  "score": "days"
+}

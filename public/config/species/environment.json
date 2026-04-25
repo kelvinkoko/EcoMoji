@@ -1,0 +1,22 @@
+[
+  {
+    "id": "water",
+    "emoji": "💧",
+    "label": "Water",
+    "group": "environment",
+    "role": "environment",
+    "placeable": true,
+    "blocksPlacement": true,
+    "terrain": "water"
+  },
+  {
+    "id": "rock",
+    "emoji": "🪨",
+    "label": "Rock",
+    "group": "environment",
+    "role": "environment",
+    "placeable": true,
+    "blocksPlacement": true,
+    "terrain": "rock"
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "id": "biodiversity",
+  "label": "Biodiversity",
+  "description": "Keep plants, herbivores, and carnivores all alive.",
+  "endWhen": { "anyGroupReachesZero": ["plant", "herbivore", "carnivore"] },
+  "score": "days"
+}

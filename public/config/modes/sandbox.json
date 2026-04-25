@@ -1,0 +1,7 @@
+{
+  "id": "sandbox",
+  "label": "Sandbox",
+  "description": "Build an ecosystem freely. No win or lose conditions.",
+  "endWhen": { "never": true },
+  "score": "days"
+}

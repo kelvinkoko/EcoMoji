@@ -1,0 +1,47 @@
+[
+  {
+    "id": "fox",
+    "emoji": "🦊",
+    "label": "Fox",
+    "group": "carnivore",
+    "role": "consumer",
+    "placeable": true,
+    "diet": ["rabbit", "snail"],
+    "energyStart": 14,
+    "energyPerEat": 10,
+    "energyPerTick": 2,
+    "reproThreshold": 22,
+    "lifespan": 70,
+    "speed": 1
+  },
+  {
+    "id": "wolf",
+    "emoji": "🐺",
+    "label": "Wolf",
+    "group": "carnivore",
+    "role": "consumer",
+    "placeable": true,
+    "diet": ["rabbit", "deer", "fox"],
+    "energyStart": 18,
+    "energyPerEat": 14,
+    "energyPerTick": 3,
+    "reproThreshold": 30,
+    "lifespan": 80,
+    "speed": 1
+  },
+  {
+    "id": "eagle",
+    "emoji": "🦅",
+    "label": "Eagle",
+    "group": "carnivore",
+    "role": "consumer",
+    "placeable": true,
+    "diet": ["rabbit", "snail", "fox"],
+    "energyStart": 16,
+    "energyPerEat": 12,
+    "energyPerTick": 2,
+    "reproThreshold": 26,
+    "lifespan": 80,
+    "speed": 2
+  }
+]

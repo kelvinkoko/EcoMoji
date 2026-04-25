@@ -1,0 +1,47 @@
+[
+  {
+    "id": "rabbit",
+    "emoji": "🐇",
+    "label": "Rabbit",
+    "group": "herbivore",
+    "role": "consumer",
+    "placeable": true,
+    "diet": ["sapling", "bush"],
+    "energyStart": 8,
+    "energyPerEat": 6,
+    "energyPerTick": 1,
+    "reproThreshold": 14,
+    "lifespan": 50,
+    "speed": 1
+  },
+  {
+    "id": "snail",
+    "emoji": "🐌",
+    "label": "Snail",
+    "group": "herbivore",
+    "role": "consumer",
+    "placeable": true,
+    "diet": ["sapling", "bush"],
+    "energyStart": 6,
+    "energyPerEat": 4,
+    "energyPerTick": 0,
+    "reproThreshold": 10,
+    "lifespan": 80,
+    "speed": 1
+  },
+  {
+    "id": "deer",
+    "emoji": "🦌",
+    "label": "Deer",
+    "group": "herbivore",
+    "role": "consumer",
+    "placeable": true,
+    "diet": ["bush", "tree"],
+    "energyStart": 14,
+    "energyPerEat": 10,
+    "energyPerTick": 1,
+    "reproThreshold": 22,
+    "lifespan": 90,
+    "speed": 1
+  }
+]
