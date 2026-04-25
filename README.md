@@ -1,6 +1,8 @@
 # 🌳 EcoMoji
 
-An emoji ecosystem simulator. Build a world on a tile grid using plant, animal, and environment emoji, then watch food chains, populations, and ecological balance play out.
+An emoji ecosystem simulator. Build a world on a hexagonal disc using plant, animal, and environment emoji, then watch food chains, populations, weather, and fire play out.
+
+**▶ [Play it live on GitHub Pages](https://kelvinkoko.github.io/EcoMoji/)**
 
 The whole game is **data-driven**: species, modes, and balance numbers live in JSON files under `public/config/`. Edit a file, refresh the browser, and the change is live — **no rebuild required**.
 

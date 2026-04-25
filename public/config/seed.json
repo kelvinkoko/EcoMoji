@@ -13,8 +13,12 @@
     { "speciesId": "flower", "count": 10 },
     { "speciesId": "mushroom", "count": 6 },
     { "speciesId": "rabbit", "count": 5 },
+    { "speciesId": "mouse", "count": 5 },
     { "speciesId": "snail", "count": 3 },
     { "speciesId": "deer", "count": 2 },
-    { "speciesId": "fox", "count": 1 }
+    { "speciesId": "turtle", "count": 2 },
+    { "speciesId": "fox", "count": 1 },
+    { "speciesId": "snake", "count": 1 },
+    { "speciesId": "bear", "count": 1 }
   ]
 }

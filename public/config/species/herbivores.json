@@ -43,5 +43,35 @@
     "reproThreshold": 22,
     "lifespan": 90,
     "speed": 1
+  },
+  {
+    "id": "mouse",
+    "emoji": "🐁",
+    "label": "Mouse",
+    "group": "herbivore",
+    "role": "consumer",
+    "placeable": true,
+    "diet": ["sapling", "flower", "mushroom"],
+    "energyStart": 5,
+    "energyPerEat": 4,
+    "energyPerTick": 1,
+    "reproThreshold": 8,
+    "lifespan": 30,
+    "speed": 1
+  },
+  {
+    "id": "turtle",
+    "emoji": "🐢",
+    "label": "Turtle",
+    "group": "herbivore",
+    "role": "consumer",
+    "placeable": true,
+    "diet": ["sapling", "bush"],
+    "energyStart": 12,
+    "energyPerEat": 6,
+    "energyPerTick": 0,
+    "reproThreshold": 18,
+    "lifespan": 200,
+    "speed": 1
   }
 ]
