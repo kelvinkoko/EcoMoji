@@ -40,6 +40,19 @@ export function applySeed(world: World, seed: SeedDef, registry: Registry, rng: 
     if (spot) setTerrain(spot, 'rock');
   }
 
+  for (const forest of seed.forests ?? []) {
+    const cq = toAxial(forest.center[0], next.radius);
+    const cr = toAxial(forest.center[1], next.radius);
+    const start = clampToDisc(next.radius, cq, cr);
+    const want = Math.max(1, forest.size ?? 5);
+    const region = growBlob(next, start, want * 2, rng);
+    let placed = 0;
+    for (const p of region) {
+      if (placed >= want) break;
+      if (placeCreature(p, forest.speciesId)) placed++;
+    }
+  }
+
   for (const item of seed.plantsNearWater ?? []) {
     let placed = 0;
     let attempts = 0;

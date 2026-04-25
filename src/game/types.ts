@@ -52,9 +52,16 @@ export interface SeedWaterCluster {
   size?: number;
 }
 
+export interface SeedForest {
+  center: [number, number];
+  size?: number;
+  speciesId: string;
+}
+
 export interface SeedDef {
   waterClusters?: SeedWaterCluster[];
   rocks?: number;
+  forests?: SeedForest[];
   plantsNearWater?: SeedScatter[];
   scatter?: SeedScatter[];
 }

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import type { World } from '../game/types';
 import type { Registry } from '../game/registry';
 import { decode, idx, inDisc } from '../game/world';
@@ -33,6 +33,27 @@ export const Grid = memo(function Grid({ world, registry, onTileClick }: Props) 
   const viewBox = `${-w / 2} ${-h / 2} ${w} ${h}`;
   const corners = hexCornerPath();
 
+  const draggingRef = useRef(false);
+  useEffect(() => {
+    const stop = () => {
+      draggingRef.current = false;
+    };
+    window.addEventListener('mouseup', stop);
+    window.addEventListener('blur', stop);
+    return () => {
+      window.removeEventListener('mouseup', stop);
+      window.removeEventListener('blur', stop);
+    };
+  }, []);
+
+  const handlePress = (q: number, r: number) => {
+    draggingRef.current = true;
+    onTileClick(q, r);
+  };
+  const handleEnter = (q: number, r: number) => {
+    if (draggingRef.current) onTileClick(q, r);
+  };
+
   const cells: JSX.Element[] = [];
   for (let q = -R; q <= R; q++) {
     for (let r = -R; r <= R; r++) {
@@ -48,7 +69,8 @@ export const Grid = memo(function Grid({ world, registry, onTileClick }: Props) 
           cx={cx}
           cy={cy}
           corners={corners}
-          onClick={() => onTileClick(q, r)}
+          onPress={() => handlePress(q, r)}
+          onEnter={() => handleEnter(q, r)}
         />
       );
     }

@@ -49,7 +49,7 @@ export function ControlBar(p: Props) {
       <div className="control-day" title={WEATHER_LABEL[p.weather]}>
         Day {p.day} {WEATHER_EMOJI[p.weather]}
       </div>
-      <button onClick={p.onReset}>🔄 Reset</button>
+      <button onClick={p.onReset} title="Roll a fresh seed, wind, and weather">🌱 New world</button>
     </header>
   );
 }

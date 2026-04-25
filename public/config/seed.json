@@ -6,9 +6,14 @@
     { "center": [-0.2, -0.7], "size": 3 }
   ],
   "rocks": 10,
+  "forests": [
+    { "center": [0.4, -0.6], "size": 7, "speciesId": "sapling" },
+    { "center": [-0.7, 0.4], "size": 6, "speciesId": "sapling" },
+    { "center": [0.2, 0.4], "size": 5, "speciesId": "bush" }
+  ],
   "plantsNearWater": [
-    { "speciesId": "sapling", "count": 20 },
-    { "speciesId": "bush", "count": 9 }
+    { "speciesId": "sapling", "count": 12 },
+    { "speciesId": "bush", "count": 6 }
   ],
   "scatter": [
     { "speciesId": "flower", "count": 18 },

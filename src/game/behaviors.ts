@@ -79,13 +79,14 @@ export const producerBehavior: Behavior = (ctx) => {
 
   const above = ctx.world.atmosphere[idx(ctx.world.radius, ctx.pos.q, ctx.pos.r)];
   const aboveId = above ? above.speciesId : undefined;
+  const wet = aboveId === 'rain' || aboveId === 'storm';
   const sunOk = !def.needs?.sun || !above || aboveId === 'cloud' || aboveId === 'rain';
-  const waterOk = !def.needs?.waterNeighbor || hasWaterNeighbor(ctx);
+  const waterOk = !def.needs?.waterNeighbor || hasWaterNeighbor(ctx) || wet;
   const healthy = sunOk && waterOk;
 
   let energyDelta = 0;
   if (healthy) energyDelta += 1;
-  if ((aboveId === 'rain' || aboveId === 'storm') && def.needs?.waterNeighbor) energyDelta += 1;
+  if (wet && def.needs?.waterNeighbor) energyDelta += 1;
   if (energyDelta !== 0) {
     updates.push({ kind: 'setEnergy', pos: ctx.pos, energy: tile.creature.energy + energyDelta });
   }

@@ -142,6 +142,22 @@ function validateSeed(raw: unknown, file: string): SeedDef {
     if (typeof r.rocks !== 'number') throw new PackError(file, 'rocks', 'must be a number');
     out.rocks = r.rocks;
   }
+  if (r.forests !== undefined) {
+    if (!Array.isArray(r.forests)) throw new PackError(file, 'forests', 'must be an array');
+    out.forests = r.forests.map((f: any, i: number) => {
+      if (!Array.isArray(f.center) || f.center.length !== 2) {
+        throw new PackError(file, `forests[${i}].center`, 'must be [x, y]');
+      }
+      if (typeof f.speciesId !== 'string') {
+        throw new PackError(file, `forests[${i}].speciesId`, 'must be a string');
+      }
+      return {
+        center: [Number(f.center[0]), Number(f.center[1])] as [number, number],
+        size: f.size != null ? Number(f.size) : undefined,
+        speciesId: f.speciesId,
+      };
+    });
+  }
   for (const key of ['plantsNearWater', 'scatter'] as const) {
     if (r[key] !== undefined) {
       if (!Array.isArray(r[key])) throw new PackError(file, key, 'must be an array');

@@ -8,16 +8,21 @@ interface Props {
   cx: number;
   cy: number;
   corners: string;
-  onClick: () => void;
+  onPress: () => void;
+  onEnter: () => void;
 }
 
-export const TileView = memo(function TileView({ tile, registry, cx, cy, corners, onClick }: Props) {
+export const TileView = memo(function TileView({ tile, registry, cx, cy, corners, onPress, onEnter }: Props) {
   const emoji = tile.creature ? registry.species(tile.creature.speciesId)?.emoji ?? '' : '';
   return (
     <g
       className="hex"
       transform={`translate(${cx.toFixed(3)} ${cy.toFixed(3)})`}
-      onClick={onClick}
+      onMouseDown={(e) => {
+        e.preventDefault();
+        onPress();
+      }}
+      onMouseEnter={onEnter}
     >
       <polygon className={`hex-cell terrain-${tile.terrain}`} points={corners} />
       {emoji && (
