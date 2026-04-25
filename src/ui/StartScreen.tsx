@@ -68,7 +68,7 @@ export function StartScreen({ pack, onStart, onImportFile }: Props) {
   return (
     <div className="landing">
       <header className="landing-hero">
-        <h1>🌳 EcoMoji</h1>
+        <h1>🌳 EcoMoji 🔮</h1>
         <p>Build an ecosphere with emoji and watch it live.</p>
       </header>
 
