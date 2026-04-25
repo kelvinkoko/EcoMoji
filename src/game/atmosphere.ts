@@ -63,6 +63,17 @@ export function tickAtmosphere(world: World, registry: Registry, rng: RNG): Worl
     }
   }
 
+  for (let i = 0; i < world.tiles.length; i++) {
+    const t = world.tiles[i];
+    if (!t || t.terrain !== 'water') continue;
+    if (world.atmosphere[i]) continue;
+    if (occupiedNext.has(i)) continue;
+    if (!rng.chance(0.02)) continue;
+    occupiedNext.add(i);
+    const pos = decode(world.radius, i);
+    updates.push({ kind: 'spawn', pos, speciesId: SPAWN_SPECIES, layer: 'atmosphere' });
+  }
+
   let next = applyAtmosphereUpdates(world, updates, registry);
   next = applyUpdates(next, updates, registry);
   return next;

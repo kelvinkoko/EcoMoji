@@ -1,10 +1,11 @@
 {
   "waterClusters": [
-    { "center": [-0.5, -0.3], "size": 6 },
-    { "center": [0.5, 0.3], "size": 6 },
-    { "center": [0.0, 0.6], "size": 4 }
+    { "center": [-0.6, -0.3], "size": 7 },
+    { "center": [0.6, 0.3], "size": 6 },
+    { "center": [0.0, 0.65], "size": 5 },
+    { "center": [-0.2, -0.7], "size": 3 }
   ],
-  "rocks": 6,
+  "rocks": 10,
   "plantsNearWater": [
     { "speciesId": "sapling", "count": 20 },
     { "speciesId": "bush", "count": 9 }

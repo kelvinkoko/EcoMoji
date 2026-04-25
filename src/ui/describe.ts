@@ -53,8 +53,8 @@ export function describeSpecies(def: SpeciesDef, registry: Registry): string[] {
           lines.push('Matures into ⛈️ Storm');
         } else if (def.id === 'storm') {
           lines.push('Drifts on the wind');
+          lines.push('Heavy rain can pool new water');
           lines.push('Lightning can ignite plants below');
-          lines.push('Floods grass next to water');
         } else {
           lines.push('Drifts on the wind');
         }
@@ -62,7 +62,7 @@ export function describeSpecies(def: SpeciesDef, registry: Registry): string[] {
       } else if (def.terrain === 'water') {
         lines.push('Water tile');
         lines.push('Plants thrive at the edges');
-        lines.push('Grows during rain');
+        lines.push('Evaporates into clouds overhead');
       } else if (def.terrain === 'rock') {
         lines.push('Rock tile');
         lines.push('Nothing can live on it');

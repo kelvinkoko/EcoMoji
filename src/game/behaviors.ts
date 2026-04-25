@@ -240,8 +240,9 @@ const rainDrop: Behavior = (ctx) => {
       break;
     }
   }
-  if (!waterNeighbor) return [];
-  if (!ctx.rng.chance(0.08)) return [];
+  const heavy = ctx.def.id === 'storm';
+  const chance = waterNeighbor ? (heavy ? 0.10 : 0.08) : (heavy ? 0.012 : 0.003);
+  if (!ctx.rng.chance(chance)) return [];
   return [{ kind: 'setTerrain', pos: ctx.pos, terrain: 'water', layer: 'tile' }];
 };
 
