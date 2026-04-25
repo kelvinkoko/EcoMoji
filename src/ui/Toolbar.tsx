@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { Registry } from '../game/registry';
 import type { Group, SpeciesDef } from '../game/types';
 import { describeSpecies } from './describe';
@@ -16,7 +18,14 @@ const GROUP_LABELS: Record<Group, string> = {
   environment: 'Environment',
 };
 
-const ERASE_TOOLTIP = ['Eraser', 'Removes the creature or terrain on a tile'];
+const ERASE_TIP = ['Removes the creature or terrain on a tile'];
+
+interface HoverState {
+  title: string;
+  lines: string[];
+  x: number;
+  y: number;
+}
 
 export function Toolbar({ registry, selected, onSelect }: Props) {
   const placeable = registry.placeable();
@@ -27,15 +36,31 @@ export function Toolbar({ registry, selected, onSelect }: Props) {
     grouped.set(s.group, arr);
   }
 
+  const [hover, setHover] = useState<HoverState | null>(null);
+
+  const showFor = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    title: string,
+    lines: string[]
+  ) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    setHover({ title, lines, x: r.right + 10, y: r.top + r.height / 2 });
+  };
+
+  const hide = () => setHover(null);
+
   return (
     <aside className="toolbar">
       <h2>Palette</h2>
       <button
         className={'tool tool-erase' + (selected === 'erase' ? ' selected' : '')}
         onClick={() => onSelect('erase')}
+        onMouseEnter={(e) => showFor(e, '🧽 Eraser', ERASE_TIP)}
+        onMouseLeave={hide}
+        onFocus={(e) => showFor(e as unknown as React.MouseEvent<HTMLButtonElement>, '🧽 Eraser', ERASE_TIP)}
+        onBlur={hide}
       >
         <span className="tool-emoji">🧽</span> Erase
-        <Tooltip title="Eraser" lines={ERASE_TOOLTIP.slice(1)} />
       </button>
 
       {GROUP_ORDER.map((g) => {
@@ -45,33 +70,43 @@ export function Toolbar({ registry, selected, onSelect }: Props) {
           <div key={g} className="tool-group">
             <h3>{GROUP_LABELS[g]}</h3>
             <div className="tool-list">
-              {list.map((s) => (
-                <button
-                  key={s.id}
-                  className={'tool' + (selected === s.id ? ' selected' : '')}
-                  onClick={() => onSelect(s.id)}
-                >
-                  <span className="tool-emoji">{s.emoji}</span> {s.label}
-                  <Tooltip title={`${s.emoji} ${s.label}`} lines={describeSpecies(s, registry)} />
-                </button>
-              ))}
+              {list.map((s) => {
+                const lines = describeSpecies(s, registry);
+                const title = `${s.emoji} ${s.label}`;
+                return (
+                  <button
+                    key={s.id}
+                    className={'tool' + (selected === s.id ? ' selected' : '')}
+                    onClick={() => onSelect(s.id)}
+                    onMouseEnter={(e) => showFor(e, title, lines)}
+                    onMouseLeave={hide}
+                    onFocus={(e) => showFor(e as unknown as React.MouseEvent<HTMLButtonElement>, title, lines)}
+                    onBlur={hide}
+                  >
+                    <span className="tool-emoji">{s.emoji}</span> {s.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
         );
       })}
-    </aside>
-  );
-}
 
-function Tooltip({ title, lines }: { title: string; lines: string[] }) {
-  return (
-    <span className="tool-tip" role="tooltip">
-      <span className="tool-tip-title">{title}</span>
-      {lines.map((l, i) => (
-        <span key={i} className="tool-tip-line">
-          {l}
-        </span>
-      ))}
-    </span>
+      {hover && createPortal(
+        <div
+          className="tool-tip"
+          role="tooltip"
+          style={{ left: hover.x, top: hover.y }}
+        >
+          <span className="tool-tip-title">{hover.title}</span>
+          {hover.lines.map((l, i) => (
+            <span key={i} className="tool-tip-line">
+              {l}
+            </span>
+          ))}
+        </div>,
+        document.body
+      )}
+    </aside>
   );
 }
