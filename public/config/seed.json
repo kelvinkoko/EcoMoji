@@ -26,6 +26,8 @@
     { "speciesId": "turtle", "count": 4 },
     { "speciesId": "fox", "count": 2 },
     { "speciesId": "snake", "count": 2 },
-    { "speciesId": "bear", "count": 2 }
+    { "speciesId": "bear", "count": 2 },
+    { "speciesId": "coral", "count": 14 },
+    { "speciesId": "fish", "count": 8 }
   ]
 }

@@ -6,7 +6,8 @@
     "species/atmosphere.json",
     "species/plants.json",
     "species/herbivores.json",
-    "species/carnivores.json"
+    "species/carnivores.json",
+    "species/aquatic.json"
   ],
   "modes": [
     "modes/sandbox.json",

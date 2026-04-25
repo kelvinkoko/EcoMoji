@@ -4,13 +4,19 @@ import type { SpeciesDef } from '../game/types';
 export function describeSpecies(def: SpeciesDef, registry: Registry): string[] {
   const lines: string[] = [];
 
+  const aquatic = (def.habitat ?? 'grass') === 'water';
+
   switch (def.role) {
     case 'producer': {
-      const head: string[] = ['Plant'];
+      const head: string[] = [aquatic ? 'Aquatic plant' : 'Plant'];
       if (def.spreadChance && def.spreadChance >= 0.06) head.push('spreads quickly');
       else if (def.spreadChance) head.push('spreads slowly');
       lines.push(head.join(' · '));
-      lines.push(def.needs?.waterNeighbor ? 'Needs water nearby' : 'Drought-tolerant');
+      if (aquatic) {
+        lines.push('Lives in 💧 water');
+      } else {
+        lines.push(def.needs?.waterNeighbor ? 'Needs water nearby' : 'Drought-tolerant');
+      }
       if (def.growsInto) {
         const next = registry.species(def.growsInto);
         if (next) lines.push(`Grows into ${next.emoji} ${next.label}`);
@@ -24,7 +30,12 @@ export function describeSpecies(def: SpeciesDef, registry: Registry): string[] {
     }
 
     case 'consumer': {
-      lines.push(def.group === 'herbivore' ? 'Herbivore' : 'Carnivore');
+      const preyAreProducers =
+        (def.diet ?? []).every((id) => registry.species(id)?.role === 'producer');
+      const grazes = (def.diet ?? []).length > 0 && preyAreProducers;
+      const role = grazes ? 'Herbivore' : 'Carnivore';
+      lines.push(aquatic ? `Aquatic ${role.toLowerCase()}` : role);
+      if (aquatic) lines.push('Lives in 💧 water');
       if (def.diet && def.diet.length > 0) {
         const prey = def.diet
           .map((id) => registry.species(id))

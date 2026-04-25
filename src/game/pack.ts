@@ -7,7 +7,7 @@ export class PackError extends Error {
 }
 
 const VALID_ROLES = new Set(['producer', 'consumer', 'environment']);
-const VALID_GROUPS = new Set(['plant', 'herbivore', 'carnivore', 'environment', 'atmosphere']);
+const VALID_GROUPS = new Set(['plant', 'herbivore', 'carnivore', 'aquatic', 'environment', 'atmosphere']);
 const VALID_TERRAINS = new Set(['grass', 'water', 'rock']);
 const VALID_LAYERS = new Set(['tile', 'atmosphere']);
 
@@ -29,9 +29,12 @@ function validateSpecies(raw: unknown, file: string, index: number): SpeciesDef 
   const role = requireField<string>(r, 'role', file);
   if (!VALID_ROLES.has(role)) throw new PackError(file, `${path}.role`, `must be one of producer|consumer|environment`);
   const group = requireField<string>(r, 'group', file);
-  if (!VALID_GROUPS.has(group)) throw new PackError(file, `${path}.group`, 'must be plant|herbivore|carnivore|environment');
+  if (!VALID_GROUPS.has(group)) throw new PackError(file, `${path}.group`, 'must be plant|herbivore|carnivore|aquatic|environment|atmosphere');
   if (r.terrain !== undefined && !VALID_TERRAINS.has(r.terrain as string)) {
     throw new PackError(file, `${path}.terrain`, 'must be grass|water|rock');
+  }
+  if (r.habitat !== undefined && !VALID_TERRAINS.has(r.habitat as string)) {
+    throw new PackError(file, `${path}.habitat`, 'must be grass|water|rock');
   }
   if (r.layer !== undefined && !VALID_LAYERS.has(r.layer as string)) {
     throw new PackError(file, `${path}.layer`, 'must be tile|atmosphere');

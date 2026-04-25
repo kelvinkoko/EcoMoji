@@ -1,4 +1,4 @@
-import type { Pos, Update, World } from './types';
+import type { Pos, Terrain, Update, World } from './types';
 import type { Registry } from './registry';
 import type { RNG } from './rng';
 import { NEIGHBOR_OFFSETS, applyUpdates, decode, idx, inDisc } from './world';
@@ -62,7 +62,7 @@ function applyMigration(world: World, registry: Registry, rng: RNG): World {
       if (dietTotal < m.needsDiet) continue;
     }
     if (!rng.chance(m.chance)) continue;
-    const spot = pickEdgeGrass(world, rng, claimed);
+    const spot = pickEdgeForHabitat(world, rng, claimed, def.habitat ?? 'grass');
     if (!spot) continue;
     claimed.add(idx(world.radius, spot.q, spot.r));
     updates.push({ kind: 'spawn', pos: spot, speciesId: def.id });
@@ -71,7 +71,12 @@ function applyMigration(world: World, registry: Registry, rng: RNG): World {
   return updates.length === 0 ? world : applyUpdates(world, updates, registry);
 }
 
-function pickEdgeGrass(world: World, rng: RNG, claimed: Set<number>): Pos | undefined {
+function pickEdgeForHabitat(
+  world: World,
+  rng: RNG,
+  claimed: Set<number>,
+  habitat: Terrain
+): Pos | undefined {
   const candidates: Pos[] = [];
   for (let q = -world.radius; q <= world.radius; q++) {
     for (let r = -world.radius; r <= world.radius; r++) {
@@ -87,7 +92,7 @@ function pickEdgeGrass(world: World, rng: RNG, claimed: Set<number>): Pos | unde
       const k = idx(world.radius, q, r);
       if (claimed.has(k)) continue;
       const t = world.tiles[k];
-      if (!t || t.terrain !== 'grass' || t.creature) continue;
+      if (!t || t.terrain !== habitat || t.creature) continue;
       candidates.push({ q, r });
     }
   }

@@ -77,6 +77,7 @@ export function tickAtmosphere(world: World, registry: Registry, rng: RNG): Worl
   for (let i = 0; i < world.tiles.length; i++) {
     const t = world.tiles[i];
     if (!t || t.terrain !== 'water') continue;
+    if (t.creature) continue;
     const above = world.atmosphere[i];
     const aboveId = above?.speciesId;
     if (aboveId === 'rain' || aboveId === 'storm') continue;

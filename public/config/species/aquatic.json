@@ -1,0 +1,50 @@
+[
+  {
+    "id": "coral",
+    "emoji": "🪸",
+    "label": "Coral",
+    "group": "aquatic",
+    "role": "producer",
+    "placeable": true,
+    "habitat": "water",
+    "needs": { "sun": true },
+    "spreadChance": 0.05,
+    "matureAge": 3,
+    "energyStart": 4,
+    "lifespan": 120
+  },
+  {
+    "id": "fish",
+    "emoji": "🐟",
+    "label": "Fish",
+    "group": "aquatic",
+    "role": "consumer",
+    "placeable": true,
+    "habitat": "water",
+    "diet": ["coral"],
+    "energyStart": 6,
+    "energyPerEat": 5,
+    "energyPerTick": 1,
+    "reproThreshold": 10,
+    "lifespan": 60,
+    "speed": 1,
+    "migrate": { "chance": 0.012, "needsDiet": 6 }
+  },
+  {
+    "id": "shark",
+    "emoji": "🦈",
+    "label": "Shark",
+    "group": "aquatic",
+    "role": "consumer",
+    "placeable": true,
+    "habitat": "water",
+    "diet": ["fish"],
+    "energyStart": 12,
+    "energyPerEat": 10,
+    "energyPerTick": 1,
+    "reproThreshold": 18,
+    "lifespan": 80,
+    "speed": 1,
+    "migrate": { "chance": 0.006, "needsDiet": 4 }
+  }
+]

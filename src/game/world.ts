@@ -87,10 +87,11 @@ export function applyUpdates(world: World, updates: Update[], registry: Registry
       case 'spawn': {
         const t = next.tiles[idx(next.radius, u.pos.q, u.pos.r)];
         if (!t) break;
-        if (t.creature || t.terrain !== 'grass') break;
-        if (!touch(u.pos)) break;
         const def = registry.species(u.speciesId);
         if (!def) break;
+        const habitat = def.habitat ?? 'grass';
+        if (t.creature || t.terrain !== habitat) break;
+        if (!touch(u.pos)) break;
         t.creature = {
           speciesId: u.speciesId,
           energy: u.energy ?? def.energyStart ?? 4,
@@ -102,7 +103,10 @@ export function applyUpdates(world: World, updates: Update[], registry: Registry
         const fromTile = next.tiles[idx(next.radius, u.from.q, u.from.r)];
         const toTile = next.tiles[idx(next.radius, u.to.q, u.to.r)];
         if (!fromTile || !toTile) break;
-        if (!fromTile.creature || toTile.creature || toTile.terrain !== 'grass') break;
+        if (!fromTile.creature || toTile.creature) break;
+        const def = registry.species(fromTile.creature.speciesId);
+        const habitat = def?.habitat ?? 'grass';
+        if (toTile.terrain !== habitat) break;
         if (!touch(u.from) || !touch(u.to)) break;
         toTile.creature = fromTile.creature;
         fromTile.creature = undefined;
@@ -174,7 +178,8 @@ export function placeAt(world: World, pos: Pos, speciesId: string, registry: Reg
     t.creature = undefined;
     return next;
   }
-  if (t.terrain !== 'grass') t.terrain = 'grass';
+  const habitat = def.habitat ?? 'grass';
+  if (t.terrain !== habitat) t.terrain = habitat;
   t.creature = {
     speciesId: def.id,
     energy: def.energyStart ?? 4,

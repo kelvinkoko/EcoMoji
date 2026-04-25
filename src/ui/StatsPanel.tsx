@@ -8,11 +8,12 @@ interface Props {
   mode: ModeDef;
 }
 
-const GROUP_ORDER: Group[] = ['plant', 'herbivore', 'carnivore'];
+const GROUP_ORDER: Group[] = ['plant', 'herbivore', 'carnivore', 'aquatic'];
 const GROUP_LABELS: Record<Group, string> = {
   plant: 'Plants',
   herbivore: 'Herbivores',
   carnivore: 'Carnivores',
+  aquatic: 'Aquatic',
   environment: 'Environment',
   atmosphere: 'Atmosphere',
 };

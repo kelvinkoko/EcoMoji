@@ -10,11 +10,12 @@ interface Props {
   onSelect: (id: string) => void;
 }
 
-const GROUP_ORDER: Group[] = ['plant', 'herbivore', 'carnivore', 'environment', 'atmosphere'];
+const GROUP_ORDER: Group[] = ['plant', 'herbivore', 'carnivore', 'aquatic', 'environment', 'atmosphere'];
 const GROUP_LABELS: Record<Group, string> = {
   plant: 'Plants',
   herbivore: 'Herbivores',
   carnivore: 'Carnivores',
+  aquatic: 'Aquatic',
   environment: 'Environment',
   atmosphere: 'Atmosphere',
 };

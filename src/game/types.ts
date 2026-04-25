@@ -1,6 +1,6 @@
 export type Terrain = 'grass' | 'water' | 'rock';
 export type Role = 'producer' | 'consumer' | 'environment';
-export type Group = 'plant' | 'herbivore' | 'carnivore' | 'environment' | 'atmosphere';
+export type Group = 'plant' | 'herbivore' | 'carnivore' | 'aquatic' | 'environment' | 'atmosphere';
 export type Layer = 'tile' | 'atmosphere';
 
 export interface MigrationDef {
@@ -18,6 +18,7 @@ export interface SpeciesDef {
   placeable: boolean;
   blocksPlacement?: boolean;
   terrain?: Terrain;
+  habitat?: Terrain;
   layer?: Layer;
   needs?: { sun?: boolean; waterNeighbor?: boolean };
   spreadChance?: number;

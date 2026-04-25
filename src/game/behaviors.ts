@@ -34,13 +34,14 @@ if (typeof window !== 'undefined') {
   window.EcoMoji = { registerBehavior };
 }
 
-function emptyGrassNeighbors(ctx: BehaviorCtx): Pos[] {
+function emptyHabitatNeighbors(ctx: BehaviorCtx): Pos[] {
+  const habitat = ctx.def.habitat ?? 'grass';
   const out: Pos[] = [];
   for (const n of neighbors(ctx.world, ctx.pos)) {
     const t = getTile(ctx.world, n.q, n.r);
     if (!t) continue;
     const k = idx(ctx.world.radius, n.q, n.r);
-    if (t.terrain === 'grass' && !t.creature && !ctx.occupiedNext.has(k)) out.push(n);
+    if (t.terrain === habitat && !t.creature && !ctx.occupiedNext.has(k)) out.push(n);
   }
   return out;
 }
@@ -102,7 +103,7 @@ export const producerBehavior: Behavior = (ctx) => {
     def.spreadChance &&
     ctx.rng.chance(def.spreadChance)
   ) {
-    const target = ctx.rng.pick(emptyGrassNeighbors(ctx));
+    const target = ctx.rng.pick(emptyHabitatNeighbors(ctx));
     if (target) {
       ctx.occupiedNext.add(idx(ctx.world.radius, target.q, target.r));
       updates.push({ kind: 'spawn', pos: target, speciesId: def.id });
@@ -143,7 +144,7 @@ export const consumerBehavior: Behavior = (ctx) => {
 
     const reproT = def.reproThreshold ?? Infinity;
     if (energy >= reproT) {
-      const open = emptyGrassNeighbors(ctx);
+      const open = emptyHabitatNeighbors(ctx);
       const spot = ctx.rng.pick(open);
       if (spot) {
         ctx.occupiedNext.add(idx(ctx.world.radius, spot.q, spot.r));
@@ -160,7 +161,7 @@ export const consumerBehavior: Behavior = (ctx) => {
     return updates;
   }
 
-  const open = emptyGrassNeighbors(ctx);
+  const open = emptyHabitatNeighbors(ctx);
   const moveTo = ctx.rng.pick(open);
   if (moveTo) {
     ctx.occupiedNext.add(idx(ctx.world.radius, moveTo.q, moveTo.r));

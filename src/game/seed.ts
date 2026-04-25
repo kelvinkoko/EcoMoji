@@ -1,4 +1,4 @@
-import type { Pos, SeedDef, World } from './types';
+import type { Pos, SeedDef, Terrain, World } from './types';
 import type { Registry } from './registry';
 import type { RNG } from './rng';
 import { cloneWorld, getTile, idx, inDisc, neighbors } from './world';
@@ -19,9 +19,11 @@ export function applySeed(world: World, seed: SeedDef, registry: Registry, rng: 
   const placeCreature = (p: Pos, speciesId: string): boolean => {
     if (!inDisc(next.radius, p.q, p.r)) return false;
     const t = next.tiles[idx(next.radius, p.q, p.r)];
-    if (!t || t.terrain !== 'grass' || t.creature) return false;
+    if (!t || t.creature) return false;
     const def = registry.species(speciesId);
     if (!def || def.role === 'environment') return false;
+    const habitat = def.habitat ?? 'grass';
+    if (t.terrain !== habitat) return false;
     t.creature = { speciesId, energy: def.energyStart ?? 4, age: 0 };
     return true;
   };
@@ -36,7 +38,7 @@ export function applySeed(world: World, seed: SeedDef, registry: Registry, rng: 
 
   const rockCount = seed.rocks ?? 0;
   for (let i = 0; i < rockCount; i++) {
-    const spot = pickRandomGrass(next, rng, 200);
+    const spot = pickRandomHabitatTile(next, rng, 200, 'grass');
     if (spot) setTerrain(spot, 'rock');
   }
 
@@ -58,7 +60,7 @@ export function applySeed(world: World, seed: SeedDef, registry: Registry, rng: 
     let attempts = 0;
     while (placed < item.count && attempts < 500) {
       attempts++;
-      const spot = pickRandomGrass(next, rng, 1);
+      const spot = pickRandomHabitatTile(next, rng, 1, 'grass');
       if (!spot) break;
       if (!hasWaterNeighbor(next, spot)) continue;
       if (placeCreature(spot, item.speciesId)) placed++;
@@ -66,11 +68,14 @@ export function applySeed(world: World, seed: SeedDef, registry: Registry, rng: 
   }
 
   for (const item of seed.scatter ?? []) {
+    const def = registry.species(item.speciesId);
+    if (!def) continue;
+    const habitat = def.habitat ?? 'grass';
     let placed = 0;
     let attempts = 0;
     while (placed < item.count && attempts < 500) {
       attempts++;
-      const spot = pickRandomGrass(next, rng, 1);
+      const spot = pickRandomHabitatTile(next, rng, 1, habitat);
       if (!spot) break;
       if (placeCreature(spot, item.speciesId)) placed++;
     }
@@ -121,14 +126,19 @@ function growBlob(world: World, start: Pos, tileCount: number, rng: RNG): Pos[] 
   return out;
 }
 
-function pickRandomGrass(world: World, rng: RNG, attempts: number): Pos | undefined {
+function pickRandomHabitatTile(
+  world: World,
+  rng: RNG,
+  attempts: number,
+  habitat: Terrain
+): Pos | undefined {
   const R = world.radius;
   for (let i = 0; i < attempts; i++) {
     const q = rng.int(2 * R + 1) - R;
     const r = rng.int(2 * R + 1) - R;
     if (!inDisc(R, q, r)) continue;
     const t = getTile(world, q, r);
-    if (t && t.terrain === 'grass' && !t.creature) return { q, r };
+    if (t && t.terrain === habitat && !t.creature) return { q, r };
   }
   return undefined;
 }
