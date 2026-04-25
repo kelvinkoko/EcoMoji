@@ -40,11 +40,29 @@ export interface ModeDef {
   score: 'days';
 }
 
+export interface SeedScatter {
+  speciesId: string;
+  count: number;
+}
+
+export interface SeedWaterCluster {
+  center: [number, number];
+  size?: number;
+}
+
+export interface SeedDef {
+  waterClusters?: SeedWaterCluster[];
+  rocks?: number;
+  plantsNearWater?: SeedScatter[];
+  scatter?: SeedScatter[];
+}
+
 export interface Pack {
   name: string;
   version: string;
   species: SpeciesDef[];
   modes: ModeDef[];
+  seed?: SeedDef;
 }
 
 export interface PackManifest {
@@ -53,6 +71,7 @@ export interface PackManifest {
   species: string[];
   modes: string[];
   scripts?: string[];
+  seed?: string;
 }
 
 export interface Creature {

@@ -12,5 +12,6 @@
     "modes/days.json",
     "modes/biodiversity.json"
   ],
+  "seed": "seed.json",
   "scripts": []
 }

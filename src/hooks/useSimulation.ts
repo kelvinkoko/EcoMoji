@@ -5,6 +5,7 @@ import { tick } from '../game/simulation';
 import type { EndState, ModeDef, Pack, Pos, World } from '../game/types';
 import { clearAt, createWorld, placeAt } from '../game/world';
 import { countPopulations, evaluateEnd, type PopCounts } from '../game/endConditions';
+import { applySeed } from '../game/seed';
 
 const TICK_MS = 600;
 
@@ -25,10 +26,14 @@ export interface SimState {
 
 export function useSimulation(pack: Pack, mode: ModeDef, size: number): SimState {
   const registry = useMemo(() => new Registry(pack), [pack]);
-  const [world, setWorld] = useState<World>(() => createWorld(size));
+  const rngRef = useRef(createRng(Date.now() & 0xffffffff));
+  const buildInitial = useCallback(() => {
+    const blank = createWorld(size);
+    return pack.seed ? applySeed(blank, pack.seed, registry, rngRef.current) : blank;
+  }, [pack, registry, size]);
+  const [world, setWorld] = useState<World>(buildInitial);
   const [paused, setPaused] = useState(true);
   const [speed, setSpeed] = useState(1);
-  const rngRef = useRef(createRng(Date.now() & 0xffffffff));
 
   const counts = useMemo(() => countPopulations(world, registry), [world, registry]);
   const end = useMemo(() => evaluateEnd(world, mode, counts), [world, mode, counts]);
@@ -47,9 +52,10 @@ export function useSimulation(pack: Pack, mode: ModeDef, size: number): SimState
     setWorld((w) => tick(w, registry, rngRef.current));
   }, [registry]);
   const reset = useCallback(() => {
-    setWorld(createWorld(size));
+    rngRef.current = createRng(Date.now() & 0xffffffff);
+    setWorld(buildInitial());
     setPaused(true);
-  }, [size]);
+  }, [buildInitial]);
 
   const place = useCallback(
     (pos: Pos, speciesId: string) => {

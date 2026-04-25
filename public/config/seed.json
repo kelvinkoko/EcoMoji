@@ -1,0 +1,17 @@
+{
+  "waterClusters": [
+    { "center": [0.3, 0.3], "size": 5 },
+    { "center": [0.7, 0.7], "size": 5 }
+  ],
+  "rocks": 3,
+  "plantsNearWater": [
+    { "speciesId": "sapling", "count": 8 },
+    { "speciesId": "bush", "count": 3 }
+  ],
+  "scatter": [
+    { "speciesId": "rabbit", "count": 4 },
+    { "speciesId": "snail", "count": 2 },
+    { "speciesId": "deer", "count": 2 },
+    { "speciesId": "fox", "count": 1 }
+  ]
+}

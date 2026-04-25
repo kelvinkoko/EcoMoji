@@ -1,4 +1,4 @@
-import type { ModeDef, Pack, PackManifest, SpeciesDef } from './types';
+import type { ModeDef, Pack, PackManifest, SeedDef, SpeciesDef } from './types';
 
 export class PackError extends Error {
   constructor(public file: string, public field: string, message: string) {
@@ -111,7 +111,44 @@ export async function loadPackFromManifest(manifestUrl: string): Promise<Pack> {
     }
   }
 
-  return { name: manifest.name, version: manifest.version ?? '0.0.0', species, modes };
+  let seed: SeedDef | undefined;
+  if (manifest.seed) {
+    const seedPath = resolveAgainst(manifestUrl, manifest.seed);
+    const raw = await fetchJson(seedPath);
+    seed = validateSeed(raw, seedPath);
+  }
+
+  return { name: manifest.name, version: manifest.version ?? '0.0.0', species, modes, seed };
+}
+
+function validateSeed(raw: unknown, file: string): SeedDef {
+  if (typeof raw !== 'object' || raw === null) throw new PackError(file, '', 'expected an object');
+  const r = raw as Record<string, unknown>;
+  const out: SeedDef = {};
+  if (r.waterClusters !== undefined) {
+    if (!Array.isArray(r.waterClusters)) throw new PackError(file, 'waterClusters', 'must be an array');
+    out.waterClusters = r.waterClusters.map((c: any, i: number) => {
+      if (!Array.isArray(c.center) || c.center.length !== 2) {
+        throw new PackError(file, `waterClusters[${i}].center`, 'must be [x, y]');
+      }
+      return { center: [Number(c.center[0]), Number(c.center[1])], size: c.size != null ? Number(c.size) : undefined };
+    });
+  }
+  if (r.rocks !== undefined) {
+    if (typeof r.rocks !== 'number') throw new PackError(file, 'rocks', 'must be a number');
+    out.rocks = r.rocks;
+  }
+  for (const key of ['plantsNearWater', 'scatter'] as const) {
+    if (r[key] !== undefined) {
+      if (!Array.isArray(r[key])) throw new PackError(file, key, 'must be an array');
+      out[key] = (r[key] as any[]).map((s: any, i: number) => {
+        if (typeof s.speciesId !== 'string') throw new PackError(file, `${key}[${i}].speciesId`, 'must be a string');
+        if (typeof s.count !== 'number') throw new PackError(file, `${key}[${i}].count`, 'must be a number');
+        return { speciesId: s.speciesId, count: s.count };
+      });
+    }
+  }
+  return out;
 }
 
 export function mergePacks(base: Pack, overlay: Partial<Pack>): Pack {
@@ -126,6 +163,7 @@ export function mergePacks(base: Pack, overlay: Partial<Pack>): Pack {
     version: overlay.version ?? base.version,
     species: [...speciesMap.values()],
     modes: [...modesMap.values()],
+    seed: overlay.seed ?? base.seed,
   };
 }
 
@@ -145,6 +183,9 @@ export async function loadPackFromFile(file: File): Promise<Partial<Pack>> {
   }
   if (Array.isArray(parsed.modes)) {
     result.modes = parsed.modes.map((raw: unknown) => validateMode(raw, file.name));
+  }
+  if (parsed.seed !== undefined) {
+    result.seed = validateSeed(parsed.seed, file.name);
   }
   return result;
 }

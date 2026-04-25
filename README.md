@@ -87,6 +87,40 @@ The bee shows up automatically in the palette and the populations panel.
 | `reproThreshold` | consumers | reproduce when energy ≥ this |
 | `behaviors` | any | array of custom behavior ids registered via `window.EcoMoji.registerBehavior` |
 
+### Change the starting layout
+
+`public/config/seed.json` defines what's already on the grid when a new game starts (and after pressing **Reset**). The default places two small lakes, plants around them, herbivores, and one fox so the world is immediately playable.
+
+```json
+{
+  "waterClusters": [
+    { "center": [0.3, 0.3], "size": 5 },
+    { "center": [0.7, 0.7], "size": 5 }
+  ],
+  "rocks": 3,
+  "plantsNearWater": [
+    { "speciesId": "sapling", "count": 8 },
+    { "speciesId": "bush", "count": 3 }
+  ],
+  "scatter": [
+    { "speciesId": "rabbit", "count": 4 },
+    { "speciesId": "snail", "count": 2 },
+    { "speciesId": "deer", "count": 2 },
+    { "speciesId": "fox", "count": 1 }
+  ]
+}
+```
+
+| Field | Meaning |
+|---|---|
+| `waterClusters[].center` | `[x, y]`. Values in `0..1` are fractions of grid size; integers are absolute tile coordinates. |
+| `waterClusters[].size` | Number of water tiles to grow from that center (random walk). |
+| `rocks` | Count of rock tiles scattered randomly. |
+| `plantsNearWater[]` | Place `count` of `speciesId` only on grass tiles adjacent to water. |
+| `scatter[]` | Place `count` of `speciesId` on any random grass tile. |
+
+Remove the `seed` field from `pack.json` (or set it to an empty object) to start with an empty grid.
+
 ### Add a new mode
 
 Drop a JSON file in `public/config/modes/` and reference it from `pack.json`:
