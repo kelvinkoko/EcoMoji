@@ -37,8 +37,9 @@ if (typeof window !== 'undefined') {
 function emptyGrassNeighbors(ctx: BehaviorCtx): Pos[] {
   const out: Pos[] = [];
   for (const n of neighbors(ctx.world, ctx.pos)) {
-    const t = getTile(ctx.world, n.x, n.y);
-    const k = idx(ctx.world.size, n.x, n.y);
+    const t = getTile(ctx.world, n.q, n.r);
+    if (!t) continue;
+    const k = idx(ctx.world.radius, n.q, n.r);
     if (t.terrain === 'grass' && !t.creature && !ctx.occupiedNext.has(k)) out.push(n);
   }
   return out;
@@ -49,23 +50,23 @@ function findPrey(ctx: BehaviorCtx): Pos | undefined {
   if (diet.length === 0) return undefined;
   const candidates: Pos[] = [];
   for (const n of neighbors(ctx.world, ctx.pos)) {
-    const t = getTile(ctx.world, n.x, n.y);
-    if (t.creature && diet.includes(t.creature.speciesId)) candidates.push(n);
+    const t = getTile(ctx.world, n.q, n.r);
+    if (t && t.creature && diet.includes(t.creature.speciesId)) candidates.push(n);
   }
   return ctx.rng.pick(candidates);
 }
 
 function hasWaterNeighbor(ctx: BehaviorCtx): boolean {
   for (const n of neighbors(ctx.world, ctx.pos)) {
-    if (getTile(ctx.world, n.x, n.y).terrain === 'water') return true;
+    if (getTile(ctx.world, n.q, n.r)?.terrain === 'water') return true;
   }
   return false;
 }
 
 export const producerBehavior: Behavior = (ctx) => {
   const updates: Update[] = [];
-  const tile = getTile(ctx.world, ctx.pos.x, ctx.pos.y);
-  if (!tile.creature) return updates;
+  const tile = getTile(ctx.world, ctx.pos.q, ctx.pos.r);
+  if (!tile?.creature) return updates;
   const def = ctx.def;
 
   const ageNext = tile.creature.age + 1;
@@ -100,7 +101,7 @@ export const producerBehavior: Behavior = (ctx) => {
   ) {
     const target = ctx.rng.pick(emptyGrassNeighbors(ctx));
     if (target) {
-      ctx.occupiedNext.add(idx(ctx.world.size, target.x, target.y));
+      ctx.occupiedNext.add(idx(ctx.world.radius, target.q, target.r));
       updates.push({ kind: 'spawn', pos: target, speciesId: def.id });
     }
   }
@@ -110,8 +111,8 @@ export const producerBehavior: Behavior = (ctx) => {
 
 export const consumerBehavior: Behavior = (ctx) => {
   const updates: Update[] = [];
-  const tile = getTile(ctx.world, ctx.pos.x, ctx.pos.y);
-  if (!tile.creature) return updates;
+  const tile = getTile(ctx.world, ctx.pos.q, ctx.pos.r);
+  if (!tile?.creature) return updates;
   const def = ctx.def;
   const c = tile.creature;
 
@@ -130,7 +131,7 @@ export const consumerBehavior: Behavior = (ctx) => {
   if (prey) {
     energy += def.energyPerEat ?? 5;
     updates.push({ kind: 'remove', pos: prey });
-    ctx.occupiedNext.add(idx(ctx.world.size, prey.x, prey.y));
+    ctx.occupiedNext.add(idx(ctx.world.radius, prey.q, prey.r));
     if (energy <= 0) {
       updates.push({ kind: 'remove', pos: ctx.pos });
       return updates;
@@ -142,7 +143,7 @@ export const consumerBehavior: Behavior = (ctx) => {
       const open = emptyGrassNeighbors(ctx);
       const spot = ctx.rng.pick(open);
       if (spot) {
-        ctx.occupiedNext.add(idx(ctx.world.size, spot.x, spot.y));
+        ctx.occupiedNext.add(idx(ctx.world.radius, spot.q, spot.r));
         const half = Math.floor(energy / 2);
         updates.push({ kind: 'setEnergy', pos: ctx.pos, energy: energy - half });
         updates.push({ kind: 'spawn', pos: spot, speciesId: def.id, energy: half });
@@ -159,7 +160,7 @@ export const consumerBehavior: Behavior = (ctx) => {
   const open = emptyGrassNeighbors(ctx);
   const moveTo = ctx.rng.pick(open);
   if (moveTo) {
-    ctx.occupiedNext.add(idx(ctx.world.size, moveTo.x, moveTo.y));
+    ctx.occupiedNext.add(idx(ctx.world.radius, moveTo.q, moveTo.r));
     updates.push({ kind: 'move', from: ctx.pos, to: moveTo });
     updates.push({ kind: 'setEnergy', pos: moveTo, energy });
   } else {

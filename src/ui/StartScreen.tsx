@@ -4,12 +4,12 @@ import { exportPack } from '../game/pack';
 
 interface Props {
   pack: Pack;
-  onStart: (mode: ModeDef, size: number) => void;
+  onStart: (mode: ModeDef, radius: number) => void;
   onImportFile: (file: File) => Promise<void>;
 }
 
 export function StartScreen({ pack, onStart, onImportFile }: Props) {
-  const [size, setSize] = useState(20);
+  const [radius, setRadius] = useState(10);
   const fileInput = useRef<HTMLInputElement>(null);
 
   const onExport = () => {
@@ -34,7 +34,7 @@ export function StartScreen({ pack, onStart, onImportFile }: Props) {
         <h2>Choose a mode</h2>
         <div className="mode-grid">
           {pack.modes.map((m) => (
-            <button key={m.id} className="mode-card" onClick={() => onStart(m, size)}>
+            <button key={m.id} className="mode-card" onClick={() => onStart(m, radius)}>
               <h3>{m.label}</h3>
               <p>{m.description}</p>
             </button>
@@ -45,10 +45,10 @@ export function StartScreen({ pack, onStart, onImportFile }: Props) {
       <section className="settings">
         <label>
           World size:&nbsp;
-          <select value={size} onChange={(e) => setSize(Number(e.target.value))}>
-            <option value={15}>15 × 15</option>
-            <option value={20}>20 × 20</option>
-            <option value={25}>25 × 25</option>
+          <select value={radius} onChange={(e) => setRadius(Number(e.target.value))}>
+            <option value={7}>Small (169 hexes)</option>
+            <option value={10}>Medium (331 hexes)</option>
+            <option value={13}>Large (547 hexes)</option>
           </select>
         </label>
       </section>

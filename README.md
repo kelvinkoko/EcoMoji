@@ -113,11 +113,13 @@ The bee shows up automatically in the palette and the populations panel.
 
 | Field | Meaning |
 |---|---|
-| `waterClusters[].center` | `[x, y]`. Values in `0..1` are fractions of grid size; integers are absolute tile coordinates. |
-| `waterClusters[].size` | Number of water tiles to grow from that center (random walk). |
+| `waterClusters[].center` | `[q, r]` axial hex coordinates. Values in `-1..1` are fractions of the disc radius; integers outside that range are absolute axial coordinates and get clamped into the disc. |
+| `waterClusters[].size` | Number of water tiles to grow from that center (random walk over hex neighbors). |
 | `rocks` | Count of rock tiles scattered randomly. |
 | `plantsNearWater[]` | Place `count` of `speciesId` only on grass tiles adjacent to water. |
 | `scatter[]` | Place `count` of `speciesId` on any random grass tile. |
+
+The world is a **hexagonal disc** in axial coordinates `(q, r)` — each tile has 6 neighbors. The disc is bounded by `max(|q|, |r|, |q+r|) ≤ R` where `R` is the chosen radius (Small=7, Medium=10, Large=13).
 
 Remove the `seed` field from `pack.json` (or set it to an empty object) to start with an empty grid.
 

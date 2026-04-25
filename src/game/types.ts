@@ -86,13 +86,13 @@ export interface Tile {
 }
 
 export interface Pos {
-  x: number;
-  y: number;
+  q: number;
+  r: number;
 }
 
 export interface World {
-  size: number;
-  tiles: Tile[];
+  radius: number;
+  tiles: (Tile | null)[];
   day: number;
   weather: 'sun' | 'rain';
 }

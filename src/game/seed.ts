@@ -1,27 +1,25 @@
 import type { Pos, SeedDef, World } from './types';
 import type { Registry } from './registry';
 import type { RNG } from './rng';
-import { getTile, idx, inBounds, neighbors } from './world';
+import { cloneWorld, getTile, idx, inDisc, neighbors } from './world';
 
 export function applySeed(world: World, seed: SeedDef, registry: Registry, rng: RNG): World {
-  const next: World = {
-    size: world.size,
-    day: 0,
-    weather: 'sun',
-    tiles: world.tiles.map((t) => ({ terrain: t.terrain, creature: t.creature ? { ...t.creature } : undefined })),
-  };
+  const next = cloneWorld(world);
+  next.day = 0;
+  next.weather = 'sun';
 
   const setTerrain = (p: Pos, terrain: 'grass' | 'water' | 'rock') => {
-    if (!inBounds(next.size, p.x, p.y)) return;
-    const t = next.tiles[idx(next.size, p.x, p.y)];
+    if (!inDisc(next.radius, p.q, p.r)) return;
+    const t = next.tiles[idx(next.radius, p.q, p.r)];
+    if (!t) return;
     t.terrain = terrain;
     if (terrain !== 'grass') t.creature = undefined;
   };
 
   const placeCreature = (p: Pos, speciesId: string): boolean => {
-    if (!inBounds(next.size, p.x, p.y)) return false;
-    const t = next.tiles[idx(next.size, p.x, p.y)];
-    if (t.terrain !== 'grass' || t.creature) return false;
+    if (!inDisc(next.radius, p.q, p.r)) return false;
+    const t = next.tiles[idx(next.radius, p.q, p.r)];
+    if (!t || t.terrain !== 'grass' || t.creature) return false;
     const def = registry.species(speciesId);
     if (!def || def.role === 'environment') return false;
     t.creature = { speciesId, energy: def.energyStart ?? 4, age: 0 };
@@ -29,10 +27,11 @@ export function applySeed(world: World, seed: SeedDef, registry: Registry, rng: 
   };
 
   for (const cluster of seed.waterClusters ?? []) {
-    const cx = toAbs(cluster.center[0], next.size);
-    const cy = toAbs(cluster.center[1], next.size);
+    const cq = toAxial(cluster.center[0], next.radius);
+    const cr = toAxial(cluster.center[1], next.radius);
+    const start = clampToDisc(next.radius, cq, cr);
     const tilesToFill = Math.max(1, cluster.size ?? 4);
-    growBlob(next.size, { x: cx, y: cy }, tilesToFill, rng).forEach((p) => setTerrain(p, 'water'));
+    growBlob(next, start, tilesToFill, rng).forEach((p) => setTerrain(p, 'water'));
   }
 
   const rockCount = seed.rocks ?? 0;
@@ -67,43 +66,62 @@ export function applySeed(world: World, seed: SeedDef, registry: Registry, rng: 
   return next;
 }
 
-function toAbs(coord: number, size: number): number {
-  if (coord >= 0 && coord <= 1) return Math.min(size - 1, Math.max(0, Math.round(coord * (size - 1))));
-  return Math.min(size - 1, Math.max(0, Math.round(coord)));
+function toAxial(coord: number, radius: number): number {
+  if (coord >= -1 && coord <= 1) return Math.round(coord * radius);
+  return Math.round(coord);
 }
 
-function growBlob(size: number, start: Pos, tileCount: number, rng: RNG): Pos[] {
+function clampToDisc(radius: number, q: number, r: number): Pos {
+  if (inDisc(radius, q, r)) return { q, r };
+  let bestQ = 0;
+  let bestR = 0;
+  let bestDist = Infinity;
+  for (let qq = -radius; qq <= radius; qq++) {
+    for (let rr = -radius; rr <= radius; rr++) {
+      if (!inDisc(radius, qq, rr)) continue;
+      const d = (q - qq) * (q - qq) + (r - rr) * (r - rr);
+      if (d < bestDist) {
+        bestDist = d;
+        bestQ = qq;
+        bestR = rr;
+      }
+    }
+  }
+  return { q: bestQ, r: bestR };
+}
+
+function growBlob(world: World, start: Pos, tileCount: number, rng: RNG): Pos[] {
   const visited = new Set<number>();
   const frontier: Pos[] = [start];
   const out: Pos[] = [];
   while (out.length < tileCount && frontier.length > 0) {
     const i = rng.int(frontier.length);
     const p = frontier.splice(i, 1)[0];
-    const k = p.y * size + p.x;
+    if (!inDisc(world.radius, p.q, p.r)) continue;
+    const k = idx(world.radius, p.q, p.r);
     if (visited.has(k)) continue;
-    if (!(p.x >= 0 && p.y >= 0 && p.x < size && p.y < size)) continue;
     visited.add(k);
     out.push(p);
-    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-      frontier.push({ x: p.x + dx, y: p.y + dy });
-    }
+    for (const n of neighbors(world, p)) frontier.push(n);
   }
   return out;
 }
 
 function pickRandomGrass(world: World, rng: RNG, attempts: number): Pos | undefined {
+  const R = world.radius;
   for (let i = 0; i < attempts; i++) {
-    const x = rng.int(world.size);
-    const y = rng.int(world.size);
-    const t = getTile(world, x, y);
-    if (t.terrain === 'grass' && !t.creature) return { x, y };
+    const q = rng.int(2 * R + 1) - R;
+    const r = rng.int(2 * R + 1) - R;
+    if (!inDisc(R, q, r)) continue;
+    const t = getTile(world, q, r);
+    if (t && t.terrain === 'grass' && !t.creature) return { q, r };
   }
   return undefined;
 }
 
 function hasWaterNeighbor(world: World, pos: Pos): boolean {
   for (const n of neighbors(world, pos)) {
-    if (getTile(world, n.x, n.y).terrain === 'water') return true;
+    if (getTile(world, n.q, n.r)?.terrain === 'water') return true;
   }
   return false;
 }

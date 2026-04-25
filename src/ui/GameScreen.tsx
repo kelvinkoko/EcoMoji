@@ -10,20 +10,20 @@ import { EndOverlay } from './EndOverlay';
 interface Props {
   pack: Pack;
   mode: ModeDef;
-  size: number;
+  radius: number;
   onExit: () => void;
 }
 
-export function GameScreen({ pack, mode, size, onExit }: Props) {
-  const sim = useSimulation(pack, mode, size);
+export function GameScreen({ pack, mode, radius, onExit }: Props) {
+  const sim = useSimulation(pack, mode, radius);
   const [selectedTool, setSelectedTool] = useState<string>('erase');
 
-  const onTileClick = (x: number, y: number) => {
+  const onTileClick = (q: number, r: number) => {
     if (selectedTool === 'erase') {
-      sim.erase({ x, y });
+      sim.erase({ q, r });
       return;
     }
-    sim.place({ x, y }, selectedTool);
+    sim.place({ q, r }, selectedTool);
   };
 
   return (

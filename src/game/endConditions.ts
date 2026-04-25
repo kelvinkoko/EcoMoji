@@ -12,7 +12,7 @@ export function countPopulations(world: World, registry: Registry): PopCounts {
   const byGroup = new Map<Group, number>();
   let totalLife = 0;
   for (const t of world.tiles) {
-    if (!t.creature) continue;
+    if (!t || !t.creature) continue;
     const def = registry.species(t.creature.speciesId);
     if (!def) continue;
     if (def.role === 'environment') continue;

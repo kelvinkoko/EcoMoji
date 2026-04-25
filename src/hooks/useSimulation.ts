@@ -24,13 +24,13 @@ export interface SimState {
   erase(pos: Pos): void;
 }
 
-export function useSimulation(pack: Pack, mode: ModeDef, size: number): SimState {
+export function useSimulation(pack: Pack, mode: ModeDef, radius: number): SimState {
   const registry = useMemo(() => new Registry(pack), [pack]);
   const rngRef = useRef(createRng(Date.now() & 0xffffffff));
   const buildInitial = useCallback(() => {
-    const blank = createWorld(size);
+    const blank = createWorld(radius);
     return pack.seed ? applySeed(blank, pack.seed, registry, rngRef.current) : blank;
-  }, [pack, registry, size]);
+  }, [pack, registry, radius]);
   const [world, setWorld] = useState<World>(buildInitial);
   const [paused, setPaused] = useState(true);
   const [speed, setSpeed] = useState(1);

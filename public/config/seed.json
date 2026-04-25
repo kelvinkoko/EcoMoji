@@ -1,7 +1,7 @@
 {
   "waterClusters": [
-    { "center": [0.3, 0.3], "size": 5 },
-    { "center": [0.7, 0.7], "size": 5 }
+    { "center": [-0.4, -0.3], "size": 5 },
+    { "center": [0.4, 0.3], "size": 5 }
   ],
   "rocks": 3,
   "plantsNearWater": [

@@ -7,7 +7,7 @@ import type { ModeDef } from './game/types';
 
 interface RunConfig {
   mode: ModeDef;
-  size: number;
+  radius: number;
 }
 
 export default function App() {
@@ -30,7 +30,7 @@ export default function App() {
     return (
       <StartScreen
         pack={packState.pack}
-        onStart={(mode, size) => setRun({ mode, size })}
+        onStart={(mode, radius) => setRun({ mode, radius })}
         onImportFile={packState.importFile}
       />
     );
@@ -40,7 +40,7 @@ export default function App() {
     <GameScreen
       pack={packState.pack}
       mode={run.mode}
-      size={run.size}
+      radius={run.radius}
       onExit={() => setRun(null)}
     />
   );
