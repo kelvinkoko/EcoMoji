@@ -7,13 +7,14 @@
   ],
   "rocks": 10,
   "forests": [
-    { "center": [0.4, -0.6], "size": 7, "speciesId": "sapling" },
-    { "center": [-0.7, 0.4], "size": 6, "speciesId": "sapling" },
-    { "center": [0.2, 0.4], "size": 5, "speciesId": "bush" }
+    { "center": [0.4, -0.6], "size": 11, "speciesId": "tree" },
+    { "center": [-0.7, 0.4], "size": 10, "speciesId": "tree" },
+    { "center": [0.2, 0.4], "size": 8, "speciesId": "tree" },
+    { "center": [-0.4, -0.5], "size": 5, "speciesId": "bush" }
   ],
   "plantsNearWater": [
-    { "speciesId": "sapling", "count": 12 },
-    { "speciesId": "bush", "count": 6 }
+    { "speciesId": "sapling", "count": 8 },
+    { "speciesId": "bush", "count": 4 }
   ],
   "scatter": [
     { "speciesId": "flower", "count": 18 },
