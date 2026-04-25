@@ -174,8 +174,7 @@ export function placeAt(world: World, pos: Pos, speciesId: string, registry: Reg
     t.creature = undefined;
     return next;
   }
-  if (t.terrain !== 'grass') return world;
-  if (t.creature) return world;
+  if (t.terrain !== 'grass') t.terrain = 'grass';
   t.creature = {
     speciesId: def.id,
     energy: def.energyStart ?? 4,
