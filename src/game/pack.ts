@@ -59,6 +59,14 @@ async function fetchJson(url: string): Promise<unknown> {
   }
 }
 
+function resolveAgainst(base: string, path: string): string {
+  try {
+    return new URL(path, new URL(base, window.location.href)).toString();
+  } catch {
+    return path;
+  }
+}
+
 export async function loadPackFromManifest(manifestUrl: string): Promise<Pack> {
   const manifest = (await fetchJson(manifestUrl)) as PackManifest;
   if (typeof manifest.name !== 'string') throw new PackError(manifestUrl, 'name', 'must be a string');
@@ -67,7 +75,8 @@ export async function loadPackFromManifest(manifestUrl: string): Promise<Pack> {
 
   const species: SpeciesDef[] = [];
   const seen = new Set<string>();
-  for (const path of manifest.species) {
+  for (const rawPath of manifest.species) {
+    const path = resolveAgainst(manifestUrl, rawPath);
     const arr = await fetchJson(path);
     if (!Array.isArray(arr)) throw new PackError(path, '', 'expected a JSON array of species');
     arr.forEach((raw, i) => {
@@ -80,7 +89,8 @@ export async function loadPackFromManifest(manifestUrl: string): Promise<Pack> {
 
   const modes: ModeDef[] = [];
   const modeIds = new Set<string>();
-  for (const path of manifest.modes) {
+  for (const rawPath of manifest.modes) {
+    const path = resolveAgainst(manifestUrl, rawPath);
     const raw = await fetchJson(path);
     const mode = validateMode(raw, path);
     if (modeIds.has(mode.id)) throw new PackError(path, 'id', `duplicate mode id "${mode.id}"`);
@@ -89,7 +99,8 @@ export async function loadPackFromManifest(manifestUrl: string): Promise<Pack> {
   }
 
   if (manifest.scripts && manifest.scripts.length > 0) {
-    for (const src of manifest.scripts) {
+    for (const rawSrc of manifest.scripts) {
+      const src = resolveAgainst(manifestUrl, rawSrc);
       await new Promise<void>((resolve, reject) => {
         const tag = document.createElement('script');
         tag.src = src;

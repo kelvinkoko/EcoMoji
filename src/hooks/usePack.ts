@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import type { Pack } from '../game/types';
 import { loadPackFromFile, loadPackFromManifest, mergePacks, PackError } from '../game/pack';
 
-const DEFAULT_MANIFEST = '/config/pack.json';
+const DEFAULT_MANIFEST = import.meta.env.BASE_URL + 'config/pack.json';
 
 export interface PackState {
   pack: Pack | null;

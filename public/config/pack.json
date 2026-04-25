@@ -2,15 +2,15 @@
   "name": "EcoMoji Default Pack",
   "version": "1.0.0",
   "species": [
-    "/config/species/environment.json",
-    "/config/species/plants.json",
-    "/config/species/herbivores.json",
-    "/config/species/carnivores.json"
+    "species/environment.json",
+    "species/plants.json",
+    "species/herbivores.json",
+    "species/carnivores.json"
   ],
   "modes": [
-    "/config/modes/sandbox.json",
-    "/config/modes/days.json",
-    "/config/modes/biodiversity.json"
+    "modes/sandbox.json",
+    "modes/days.json",
+    "modes/biodiversity.json"
   ],
   "scripts": []
 }
