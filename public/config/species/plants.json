@@ -39,5 +39,30 @@
     "matureAge": 20,
     "energyStart": 6,
     "lifespan": 200
+  },
+  {
+    "id": "flower",
+    "emoji": "🌸",
+    "label": "Flower",
+    "group": "plant",
+    "role": "producer",
+    "placeable": true,
+    "needs": { "sun": true },
+    "spreadChance": 0.05,
+    "matureAge": 4,
+    "energyStart": 2,
+    "lifespan": 50
+  },
+  {
+    "id": "mushroom",
+    "emoji": "🍄",
+    "label": "Mushroom",
+    "group": "plant",
+    "role": "producer",
+    "placeable": true,
+    "spreadChance": 0.04,
+    "matureAge": 5,
+    "energyStart": 2,
+    "lifespan": 60
   }
 ]
