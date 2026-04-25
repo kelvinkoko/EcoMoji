@@ -1,7 +1,7 @@
 import type { Pos, Update, WeatherKind, World } from './types';
 import type { Registry } from './registry';
 import type { RNG } from './rng';
-import { applyUpdates, cloneWorld, decode, idx, inDisc } from './world';
+import { applyUpdates, cloneWorld, decode, getTile, idx, inDisc, neighbors } from './world';
 import { getCustomBehavior } from './behaviors';
 
 const SPAWN_SPECIES = 'cloud';
@@ -72,6 +72,26 @@ export function tickAtmosphere(world: World, registry: Registry, rng: RNG): Worl
     occupiedNext.add(i);
     const pos = decode(world.radius, i);
     updates.push({ kind: 'spawn', pos, speciesId: SPAWN_SPECIES, layer: 'atmosphere' });
+  }
+
+  for (let i = 0; i < world.tiles.length; i++) {
+    const t = world.tiles[i];
+    if (!t || t.terrain !== 'water') continue;
+    const above = world.atmosphere[i];
+    const aboveId = above?.speciesId;
+    if (aboveId === 'rain' || aboveId === 'storm') continue;
+    const pos = decode(world.radius, i);
+    let shoreline = false;
+    for (const n of neighbors(world, pos)) {
+      if (getTile(world, n.q, n.r)?.terrain === 'grass') {
+        shoreline = true;
+        break;
+      }
+    }
+    if (!shoreline) continue;
+    const dryChance = aboveId === 'cloud' ? 0.012 : 0.025;
+    if (!rng.chance(dryChance)) continue;
+    updates.push({ kind: 'setTerrain', pos, terrain: 'grass', layer: 'tile' });
   }
 
   let next = applyAtmosphereUpdates(world, updates, registry);

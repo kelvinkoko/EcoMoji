@@ -66,6 +66,7 @@ export function describeSpecies(def: SpeciesDef, registry: Registry): string[] {
         lines.push('Water tile');
         lines.push('Plants thrive at the edges');
         lines.push('Evaporates into clouds overhead');
+        lines.push('Edges dry under clear skies');
       } else if (def.terrain === 'rock') {
         lines.push('Rock tile');
         lines.push('Nothing can live on it');
