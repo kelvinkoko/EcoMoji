@@ -1,7 +1,7 @@
 import type { Pos, Tile, Update, World } from './types';
 import type { Registry } from './registry';
 
-const NEIGHBOR_OFFSETS: ReadonlyArray<readonly [number, number]> = [
+export const NEIGHBOR_OFFSETS: ReadonlyArray<readonly [number, number]> = [
   [1, 0],
   [-1, 0],
   [0, 1],
@@ -41,22 +41,25 @@ export function neighbors(world: World, pos: Pos): Pos[] {
 export function createWorld(radius: number): World {
   const stride = 2 * radius + 1;
   const tiles: (Tile | null)[] = new Array(stride * stride).fill(null);
+  const atmosphere: World['atmosphere'] = new Array(stride * stride).fill(null);
   for (let q = -radius; q <= radius; q++) {
     for (let r = -radius; r <= radius; r++) {
       if (inDisc(radius, q, r)) tiles[idx(radius, q, r)] = { terrain: 'grass' };
     }
   }
-  return { radius, tiles, day: 0, weather: 'sun' };
+  const [dq, dr] = NEIGHBOR_OFFSETS[Math.floor(Math.random() * NEIGHBOR_OFFSETS.length)];
+  return { radius, tiles, atmosphere, day: 0, wind: { dq, dr } };
 }
 
 export function cloneWorld(world: World): World {
   return {
     radius: world.radius,
     day: world.day,
-    weather: world.weather,
+    wind: { ...world.wind },
     tiles: world.tiles.map((t) =>
       t === null ? null : { terrain: t.terrain, creature: t.creature ? { ...t.creature } : undefined }
     ),
+    atmosphere: world.atmosphere.map((c) => (c === null ? null : { ...c })),
   };
 }
 
@@ -72,6 +75,7 @@ export function applyUpdates(world: World, updates: Update[], registry: Registry
   };
 
   for (const u of updates) {
+    if (u.layer === 'atmosphere') continue;
     switch (u.kind) {
       case 'remove': {
         const t = next.tiles[idx(next.radius, u.pos.q, u.pos.r)];
@@ -154,7 +158,16 @@ export function placeAt(world: World, pos: Pos, speciesId: string, registry: Reg
   if (!def) return world;
   if (!inDisc(world.radius, pos.q, pos.r)) return world;
   const next = cloneWorld(world);
-  const t = next.tiles[idx(next.radius, pos.q, pos.r)];
+  const k = idx(next.radius, pos.q, pos.r);
+  if (def.layer === 'atmosphere') {
+    next.atmosphere[k] = {
+      speciesId: def.id,
+      energy: def.energyStart ?? 0,
+      age: 0,
+    };
+    return next;
+  }
+  const t = next.tiles[k];
   if (!t) return world;
   if (def.role === 'environment' && def.terrain) {
     t.terrain = def.terrain;
@@ -174,7 +187,12 @@ export function placeAt(world: World, pos: Pos, speciesId: string, registry: Reg
 export function clearAt(world: World, pos: Pos): World {
   if (!inDisc(world.radius, pos.q, pos.r)) return world;
   const next = cloneWorld(world);
-  const t = next.tiles[idx(next.radius, pos.q, pos.r)];
+  const k = idx(next.radius, pos.q, pos.r);
+  if (next.atmosphere[k]) {
+    next.atmosphere[k] = null;
+    return next;
+  }
+  const t = next.tiles[k];
   if (!t) return world;
   t.creature = undefined;
   t.terrain = 'grass';

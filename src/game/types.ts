@@ -1,6 +1,7 @@
 export type Terrain = 'grass' | 'water' | 'rock';
 export type Role = 'producer' | 'consumer' | 'environment';
-export type Group = 'plant' | 'herbivore' | 'carnivore' | 'environment';
+export type Group = 'plant' | 'herbivore' | 'carnivore' | 'environment' | 'atmosphere';
+export type Layer = 'tile' | 'atmosphere';
 
 export interface SpeciesDef {
   id: string;
@@ -11,6 +12,7 @@ export interface SpeciesDef {
   placeable: boolean;
   blocksPlacement?: boolean;
   terrain?: Terrain;
+  layer?: Layer;
   needs?: { sun?: boolean; waterNeighbor?: boolean };
   spreadChance?: number;
   matureAge?: number;
@@ -93,19 +95,22 @@ export interface Pos {
 export interface World {
   radius: number;
   tiles: (Tile | null)[];
+  atmosphere: (Creature | null)[];
+  wind: { dq: number; dr: number };
   day: number;
-  weather: 'sun' | 'clouds' | 'rain' | 'storm';
 }
 
 export type Update =
-  | { kind: 'spawn'; pos: Pos; speciesId: string; energy?: number }
-  | { kind: 'remove'; pos: Pos }
-  | { kind: 'move'; from: Pos; to: Pos }
-  | { kind: 'setEnergy'; pos: Pos; energy: number }
-  | { kind: 'setAge'; pos: Pos; age: number }
-  | { kind: 'transform'; pos: Pos; speciesId: string }
-  | { kind: 'setTerrain'; pos: Pos; terrain: Terrain }
-  | { kind: 'ignite'; pos: Pos; speciesId: string; energy?: number };
+  | { kind: 'spawn'; pos: Pos; speciesId: string; energy?: number; layer?: Layer }
+  | { kind: 'remove'; pos: Pos; layer?: Layer }
+  | { kind: 'move'; from: Pos; to: Pos; layer?: Layer }
+  | { kind: 'setEnergy'; pos: Pos; energy: number; layer?: Layer }
+  | { kind: 'setAge'; pos: Pos; age: number; layer?: Layer }
+  | { kind: 'transform'; pos: Pos; speciesId: string; layer?: Layer }
+  | { kind: 'setTerrain'; pos: Pos; terrain: Terrain; layer?: Layer }
+  | { kind: 'ignite'; pos: Pos; speciesId: string; energy?: number; layer?: Layer };
+
+export type WeatherKind = 'sun' | 'clouds' | 'rain' | 'storm';
 
 export interface EndState {
   ended: boolean;

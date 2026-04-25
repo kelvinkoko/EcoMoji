@@ -168,13 +168,13 @@ code { background: #21333a; padding: 1px 4px; border-radius: 3px; }
   user-select: none;
 }
 .weather-marker {
-  font-size: 28px;
+  font-size: 24px;
   font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Segoe UI Symbol", system-ui, sans-serif;
   user-select: none;
 }
-.weather-clouds .weather-marker { opacity: 0.55; }
-.weather-rain .weather-marker { opacity: 0.7; }
-.weather-storm .weather-marker { opacity: 0.8; }
+.weather-marker.weather-cloud { opacity: 0.6; }
+.weather-marker.weather-rain { opacity: 0.75; }
+.weather-marker.weather-storm { opacity: 0.85; }
 
 /* stats */
 .goal p { color: #a9c4b3; margin: 4px 0 16px; }

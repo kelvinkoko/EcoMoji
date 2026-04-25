@@ -1,7 +1,7 @@
 import type { Pos, SpeciesDef, Update, World } from './types';
 import type { Registry } from './registry';
 import type { RNG } from './rng';
-import { getTile, idx, neighbors } from './world';
+import { NEIGHBOR_OFFSETS, getTile, idx, inDisc, neighbors } from './world';
 
 export interface BehaviorCtx {
   world: World;
@@ -77,13 +77,15 @@ export const producerBehavior: Behavior = (ctx) => {
     return updates;
   }
 
-  const sunOk = !def.needs?.sun || ctx.world.weather === 'sun' || ctx.world.weather === 'rain';
+  const above = ctx.world.atmosphere[idx(ctx.world.radius, ctx.pos.q, ctx.pos.r)];
+  const aboveId = above ? above.speciesId : undefined;
+  const sunOk = !def.needs?.sun || !above || aboveId === 'cloud' || aboveId === 'rain';
   const waterOk = !def.needs?.waterNeighbor || hasWaterNeighbor(ctx);
   const healthy = sunOk && waterOk;
 
   let energyDelta = 0;
   if (healthy) energyDelta += 1;
-  if (ctx.world.weather === 'rain' && def.needs?.waterNeighbor) energyDelta += 1;
+  if ((aboveId === 'rain' || aboveId === 'storm') && def.needs?.waterNeighbor) energyDelta += 1;
   if (energyDelta !== 0) {
     updates.push({ kind: 'setEnergy', pos: ctx.pos, energy: tile.creature.energy + energyDelta });
   }
@@ -176,7 +178,8 @@ const fireSpread: Behavior = (ctx) => {
   const updates: Update[] = [];
   const tile = getTile(ctx.world, ctx.pos.q, ctx.pos.r);
   if (!tile?.creature) return updates;
-  const wet = ctx.world.weather === 'rain' || ctx.world.weather === 'storm';
+  const above = ctx.world.atmosphere[idx(ctx.world.radius, ctx.pos.q, ctx.pos.r)];
+  const wet = above?.speciesId === 'rain' || above?.speciesId === 'storm';
   const decay = wet ? 2 : 1;
   const energy = tile.creature.energy - decay;
   if (energy <= 0) {
@@ -206,6 +209,55 @@ const fireSpread: Behavior = (ctx) => {
 };
 
 registerBehavior('fire-spread', fireSpread);
+
+const windDrift: Behavior = (ctx) => {
+  if (!ctx.rng.chance(0.7)) return [];
+  const { wind } = ctx.world;
+  const choices: Pos[] = [];
+  for (const [dq, dr] of NEIGHBOR_OFFSETS) {
+    const nq = ctx.pos.q + dq;
+    const nr = ctx.pos.r + dr;
+    if (!inDisc(ctx.world.radius, nq, nr)) continue;
+    const k = idx(ctx.world.radius, nq, nr);
+    if (ctx.world.atmosphere[k]) continue;
+    if (ctx.occupiedNext.has(k)) continue;
+    const weight = dq === wind.dq && dr === wind.dr ? 3 : 1;
+    for (let i = 0; i < weight; i++) choices.push({ q: nq, r: nr });
+  }
+  const target = ctx.rng.pick(choices);
+  if (!target) return [];
+  ctx.occupiedNext.add(idx(ctx.world.radius, target.q, target.r));
+  return [{ kind: 'move', from: ctx.pos, to: target, layer: 'atmosphere' }];
+};
+
+const rainDrop: Behavior = (ctx) => {
+  const tile = getTile(ctx.world, ctx.pos.q, ctx.pos.r);
+  if (!tile || tile.terrain !== 'grass' || tile.creature) return [];
+  let waterNeighbor = false;
+  for (const n of neighbors(ctx.world, ctx.pos)) {
+    if (getTile(ctx.world, n.q, n.r)?.terrain === 'water') {
+      waterNeighbor = true;
+      break;
+    }
+  }
+  if (!waterNeighbor) return [];
+  if (!ctx.rng.chance(0.08)) return [];
+  return [{ kind: 'setTerrain', pos: ctx.pos, terrain: 'water', layer: 'tile' }];
+};
+
+const stormStrike: Behavior = (ctx) => {
+  const tile = getTile(ctx.world, ctx.pos.q, ctx.pos.r);
+  if (!tile || tile.terrain !== 'grass') return [];
+  if (!tile.creature) return [];
+  const def = ctx.registry.species(tile.creature.speciesId);
+  if (def?.role !== 'producer') return [];
+  if (!ctx.rng.chance(0.04)) return [];
+  return [{ kind: 'ignite', pos: ctx.pos, speciesId: 'fire', energy: 4, layer: 'tile' }];
+};
+
+registerBehavior('wind-drift', windDrift);
+registerBehavior('rain-drop', rainDrop);
+registerBehavior('storm-strike', stormStrike);
 
 export function behaviorForRole(role: 'producer' | 'consumer' | 'environment'): Behavior {
   switch (role) {

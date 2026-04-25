@@ -42,7 +42,24 @@ export function describeSpecies(def: SpeciesDef, registry: Registry): string[] {
     }
 
     case 'environment': {
-      if (def.terrain === 'water') {
+      if (def.layer === 'atmosphere') {
+        if (def.id === 'cloud') {
+          lines.push('Drifts on the wind');
+          lines.push('Matures into 🌧️ Rain');
+          lines.push('Plants below still get diffuse sun');
+        } else if (def.id === 'rain') {
+          lines.push('Drifts on the wind');
+          lines.push('Floods grass next to water');
+          lines.push('Matures into ⛈️ Storm');
+        } else if (def.id === 'storm') {
+          lines.push('Drifts on the wind');
+          lines.push('Lightning can ignite plants below');
+          lines.push('Floods grass next to water');
+        } else {
+          lines.push('Drifts on the wind');
+        }
+        if (def.lifespan) lines.push(`Lasts ~${def.lifespan} ticks`);
+      } else if (def.terrain === 'water') {
         lines.push('Water tile');
         lines.push('Plants thrive at the edges');
         lines.push('Grows during rain');

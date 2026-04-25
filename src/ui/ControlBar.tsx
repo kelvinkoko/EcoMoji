@@ -1,9 +1,9 @@
-import type { ModeDef, World } from '../game/types';
+import type { ModeDef, WeatherKind } from '../game/types';
 
 interface Props {
   mode: ModeDef;
   day: number;
-  weather: World['weather'];
+  weather: WeatherKind;
   paused: boolean;
   speed: number;
   onTogglePause: () => void;
@@ -13,13 +13,13 @@ interface Props {
   onExit: () => void;
 }
 
-const WEATHER_EMOJI: Record<World['weather'], string> = {
+const WEATHER_EMOJI: Record<WeatherKind, string> = {
   sun: '☀️',
   clouds: '☁️',
   rain: '🌧️',
   storm: '⛈️',
 };
-const WEATHER_LABEL: Record<World['weather'], string> = {
+const WEATHER_LABEL: Record<WeatherKind, string> = {
   sun: 'Sunny',
   clouds: 'Cloudy',
   rain: 'Raining — lakes may grow',

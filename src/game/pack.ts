@@ -7,8 +7,9 @@ export class PackError extends Error {
 }
 
 const VALID_ROLES = new Set(['producer', 'consumer', 'environment']);
-const VALID_GROUPS = new Set(['plant', 'herbivore', 'carnivore', 'environment']);
+const VALID_GROUPS = new Set(['plant', 'herbivore', 'carnivore', 'environment', 'atmosphere']);
 const VALID_TERRAINS = new Set(['grass', 'water', 'rock']);
+const VALID_LAYERS = new Set(['tile', 'atmosphere']);
 
 function requireField<T>(obj: any, key: string, file: string): T {
   if (obj == null || obj[key] === undefined || obj[key] === null) {
@@ -31,6 +32,9 @@ function validateSpecies(raw: unknown, file: string, index: number): SpeciesDef 
   if (!VALID_GROUPS.has(group)) throw new PackError(file, `${path}.group`, 'must be plant|herbivore|carnivore|environment');
   if (r.terrain !== undefined && !VALID_TERRAINS.has(r.terrain as string)) {
     throw new PackError(file, `${path}.terrain`, 'must be grass|water|rock');
+  }
+  if (r.layer !== undefined && !VALID_LAYERS.has(r.layer as string)) {
+    throw new PackError(file, `${path}.layer`, 'must be tile|atmosphere');
   }
   if (typeof r.emoji !== 'string') throw new PackError(file, `${path}.emoji`, 'must be a string');
   if (typeof r.label !== 'string') throw new PackError(file, `${path}.label`, 'must be a string');

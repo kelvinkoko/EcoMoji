@@ -2,11 +2,11 @@ import type { Pos, SeedDef, World } from './types';
 import type { Registry } from './registry';
 import type { RNG } from './rng';
 import { cloneWorld, getTile, idx, inDisc, neighbors } from './world';
+import { seedAtmosphere } from './atmosphere';
 
 export function applySeed(world: World, seed: SeedDef, registry: Registry, rng: RNG): World {
-  const next = cloneWorld(world);
+  let next = cloneWorld(world);
   next.day = 0;
-  next.weather = 'sun';
 
   const setTerrain = (p: Pos, terrain: 'grass' | 'water' | 'rock') => {
     if (!inDisc(next.radius, p.q, p.r)) return;
@@ -63,6 +63,7 @@ export function applySeed(world: World, seed: SeedDef, registry: Registry, rng: 
     }
   }
 
+  next = seedAtmosphere(next, rng);
   return next;
 }
 

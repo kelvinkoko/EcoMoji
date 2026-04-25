@@ -14,6 +14,7 @@ const GROUP_LABELS: Record<Group, string> = {
   herbivore: 'Herbivores',
   carnivore: 'Carnivores',
   environment: 'Environment',
+  atmosphere: 'Atmosphere',
 };
 
 export function StatsPanel({ registry, counts, mode }: Props) {

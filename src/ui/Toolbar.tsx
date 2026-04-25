@@ -10,12 +10,13 @@ interface Props {
   onSelect: (id: string) => void;
 }
 
-const GROUP_ORDER: Group[] = ['plant', 'herbivore', 'carnivore', 'environment'];
+const GROUP_ORDER: Group[] = ['plant', 'herbivore', 'carnivore', 'environment', 'atmosphere'];
 const GROUP_LABELS: Record<Group, string> = {
   plant: 'Plants',
   herbivore: 'Herbivores',
   carnivore: 'Carnivores',
   environment: 'Environment',
+  atmosphere: 'Atmosphere',
 };
 
 const ERASE_TIP = ['Removes the creature or terrain on a tile'];

@@ -1,0 +1,39 @@
+[
+  {
+    "id": "cloud",
+    "emoji": "☁️",
+    "label": "Cloud",
+    "group": "atmosphere",
+    "role": "environment",
+    "layer": "atmosphere",
+    "placeable": true,
+    "matureAge": 3,
+    "growsInto": "rain",
+    "lifespan": 8,
+    "behaviors": ["wind-drift"]
+  },
+  {
+    "id": "rain",
+    "emoji": "🌧️",
+    "label": "Rain",
+    "group": "atmosphere",
+    "role": "environment",
+    "layer": "atmosphere",
+    "placeable": true,
+    "matureAge": 2,
+    "growsInto": "storm",
+    "lifespan": 6,
+    "behaviors": ["wind-drift", "rain-drop"]
+  },
+  {
+    "id": "storm",
+    "emoji": "⛈️",
+    "label": "Storm",
+    "group": "atmosphere",
+    "role": "environment",
+    "layer": "atmosphere",
+    "placeable": true,
+    "lifespan": 4,
+    "behaviors": ["wind-drift", "rain-drop", "storm-strike"]
+  }
+]

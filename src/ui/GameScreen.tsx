@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { ModeDef, Pack } from '../game/types';
 import { useSimulation } from '../hooks/useSimulation';
+import { dominantWeather } from '../game/atmosphere';
 import { Toolbar } from './Toolbar';
 import { Grid } from './Grid';
 import { ControlBar } from './ControlBar';
@@ -17,6 +18,7 @@ interface Props {
 export function GameScreen({ pack, mode, radius, onExit }: Props) {
   const sim = useSimulation(pack, mode, radius);
   const [selectedTool, setSelectedTool] = useState<string>('erase');
+  const weather = useMemo(() => dominantWeather(sim.world), [sim.world]);
 
   const onTileClick = (q: number, r: number) => {
     if (selectedTool === 'erase') {
@@ -31,7 +33,7 @@ export function GameScreen({ pack, mode, radius, onExit }: Props) {
       <ControlBar
         mode={mode}
         day={sim.world.day}
-        weather={sim.world.weather}
+        weather={weather}
         paused={sim.paused}
         speed={sim.speed}
         onTogglePause={sim.togglePause}

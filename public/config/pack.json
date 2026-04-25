@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "species": [
     "species/environment.json",
+    "species/atmosphere.json",
     "species/plants.json",
     "species/herbivores.json",
     "species/carnivores.json"
