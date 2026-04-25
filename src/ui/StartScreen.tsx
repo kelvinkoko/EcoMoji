@@ -1,11 +1,53 @@
-import { useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ModeDef, Pack } from '../game/types';
 import { exportPack } from '../game/pack';
+import { useSimulation } from '../hooks/useSimulation';
+import { Grid } from './Grid';
 
 interface Props {
   pack: Pack;
   onStart: (mode: ModeDef, radius: number) => void;
   onImportFile: (file: File) => Promise<void>;
+}
+
+const PREVIEW_RADIUS = 5;
+
+const SIZE_OPTIONS: { radius: number; label: string }[] = [
+  { radius: 7, label: 'Small' },
+  { radius: 10, label: 'Medium' },
+  { radius: 13, label: 'Large' },
+];
+
+function PreviewWorld({ pack }: { pack: Pack }) {
+  const previewMode = useMemo<ModeDef>(
+    () => ({
+      id: '__preview__',
+      label: 'Preview',
+      description: '',
+      endWhen: { never: true },
+      score: 'days',
+    }),
+    []
+  );
+  const sim = useSimulation(pack, previewMode, PREVIEW_RADIUS);
+  const { paused, togglePause, reset, counts } = sim;
+
+  useEffect(() => {
+    if (paused) togglePause();
+  }, [paused, togglePause]);
+
+  useEffect(() => {
+    if (counts.totalLife === 0) {
+      const id = window.setTimeout(() => reset(), 1500);
+      return () => window.clearTimeout(id);
+    }
+  }, [counts.totalLife, reset]);
+
+  return (
+    <div className="landing-preview" aria-hidden="true">
+      <Grid world={sim.world} registry={sim.registry} onTileClick={() => {}} />
+    </div>
+  );
 }
 
 export function StartScreen({ pack, onStart, onImportFile }: Props) {
@@ -24,14 +66,31 @@ export function StartScreen({ pack, onStart, onImportFile }: Props) {
   };
 
   return (
-    <div className="start-screen">
-      <header className="start-header">
+    <div className="landing">
+      <header className="landing-hero">
         <h1>🌳 EcoMoji</h1>
-        <p>An emoji ecosystem simulator. Build a world. Watch it live.</p>
+        <p>Build an ecosphere with emoji and watch it live.</p>
       </header>
 
-      <section className="modes">
-        <h2>Choose a mode</h2>
+      <PreviewWorld pack={pack} />
+
+      <section className="landing-section">
+        <h2>World size</h2>
+        <div className="size-row">
+          {SIZE_OPTIONS.map((opt) => (
+            <button
+              key={opt.radius}
+              className={'size-chip' + (radius === opt.radius ? ' selected' : '')}
+              onClick={() => setRadius(opt.radius)}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="landing-section">
+        <h2>Pick a mode to start</h2>
         <div className="mode-grid">
           {pack.modes.map((m) => (
             <button key={m.id} className="mode-card" onClick={() => onStart(m, radius)}>
@@ -42,21 +101,13 @@ export function StartScreen({ pack, onStart, onImportFile }: Props) {
         </div>
       </section>
 
-      <section className="settings">
-        <label>
-          World size:&nbsp;
-          <select value={radius} onChange={(e) => setRadius(Number(e.target.value))}>
-            <option value={7}>Small (169 hexes)</option>
-            <option value={10}>Medium (331 hexes)</option>
-            <option value={13}>Large (547 hexes)</option>
-          </select>
-        </label>
-      </section>
-
-      <section className="pack-info">
-        <h2>Pack: {pack.name}</h2>
+      <details className="landing-advanced">
+        <summary>Mod the game</summary>
         <p>
-          {pack.species.length} species · {pack.modes.length} modes · v{pack.version}
+          {pack.name} · {pack.species.length} species · {pack.modes.length} modes · v{pack.version}
+        </p>
+        <p className="muted">
+          Edit <code>public/config/*.json</code> and refresh — no rebuild needed.
         </p>
         <div className="pack-buttons">
           <button onClick={() => fileInput.current?.click()}>Import pack…</button>
@@ -73,25 +124,7 @@ export function StartScreen({ pack, onStart, onImportFile }: Props) {
           />
           <button onClick={onExport}>Export pack</button>
         </div>
-        <details className="species-list">
-          <summary>Loaded species</summary>
-          <ul>
-            {pack.species.map((s) => (
-              <li key={s.id}>
-                <span className="emoji">{s.emoji}</span> {s.label}{' '}
-                <code>{s.id}</code>
-                <small> · {s.group}</small>
-              </li>
-            ))}
-          </ul>
-        </details>
-      </section>
-
-      <footer className="start-footer">
-        <p>
-          Edit <code>public/config/*.json</code> and refresh to mod the game — no rebuild needed.
-        </p>
-      </footer>
+      </details>
     </div>
   );
 }

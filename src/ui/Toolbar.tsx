@@ -53,16 +53,19 @@ export function Toolbar({ registry, selected, onSelect }: Props) {
   return (
     <aside className="toolbar">
       <h2>Palette</h2>
-      <button
-        className={'tool tool-erase' + (selected === 'erase' ? ' selected' : '')}
-        onClick={() => onSelect('erase')}
-        onMouseEnter={(e) => showFor(e, '🧽 Eraser', ERASE_TIP)}
-        onMouseLeave={hide}
-        onFocus={(e) => showFor(e as unknown as React.MouseEvent<HTMLButtonElement>, '🧽 Eraser', ERASE_TIP)}
-        onBlur={hide}
-      >
-        <span className="tool-emoji">🧽</span> Erase
-      </button>
+      <div className="tool-grid">
+        <button
+          className={'tool tool-erase' + (selected === 'erase' ? ' selected' : '')}
+          onClick={() => onSelect('erase')}
+          onMouseEnter={(e) => showFor(e, '🧽 Eraser', ERASE_TIP)}
+          onMouseLeave={hide}
+          onFocus={(e) => showFor(e as unknown as React.MouseEvent<HTMLButtonElement>, '🧽 Eraser', ERASE_TIP)}
+          onBlur={hide}
+          aria-label="Eraser"
+        >
+          <span className="tool-emoji">🧽</span>
+        </button>
+      </div>
 
       {GROUP_ORDER.map((g) => {
         const list = grouped.get(g);
@@ -70,7 +73,7 @@ export function Toolbar({ registry, selected, onSelect }: Props) {
         return (
           <div key={g} className="tool-group">
             <h3>{GROUP_LABELS[g]}</h3>
-            <div className="tool-list">
+            <div className="tool-grid">
               {list.map((s) => {
                 const lines = describeSpecies(s, registry);
                 const title = `${s.emoji} ${s.label}`;
@@ -83,8 +86,9 @@ export function Toolbar({ registry, selected, onSelect }: Props) {
                     onMouseLeave={hide}
                     onFocus={(e) => showFor(e as unknown as React.MouseEvent<HTMLButtonElement>, title, lines)}
                     onBlur={hide}
+                    aria-label={s.label}
                   >
-                    <span className="tool-emoji">{s.emoji}</span> {s.label}
+                    <span className="tool-emoji">{s.emoji}</span>
                   </button>
                 );
               })}
