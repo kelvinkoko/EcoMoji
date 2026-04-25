@@ -3,6 +3,12 @@ export type Role = 'producer' | 'consumer' | 'environment';
 export type Group = 'plant' | 'herbivore' | 'carnivore' | 'environment' | 'atmosphere';
 export type Layer = 'tile' | 'atmosphere';
 
+export interface MigrationDef {
+  chance: number;
+  whenBelow?: number;
+  needsDiet?: number;
+}
+
 export interface SpeciesDef {
   id: string;
   emoji: string;
@@ -25,6 +31,7 @@ export interface SpeciesDef {
   lifespan?: number;
   speed?: number;
   behaviors?: string[];
+  migrate?: MigrationDef;
 }
 
 export type EndWhen =

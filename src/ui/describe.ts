@@ -38,6 +38,9 @@ export function describeSpecies(def: SpeciesDef, registry: Registry): string[] {
       }
       if (def.lifespan) lines.push(`Lives ~${def.lifespan} days`);
       lines.push('Breeds when well fed');
+      if (def.migrate?.needsDiet) {
+        lines.push(`Wanders in if ${def.migrate.needsDiet}+ food and none here`);
+      }
       break;
     }
 

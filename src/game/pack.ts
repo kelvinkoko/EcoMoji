@@ -39,6 +39,21 @@ function validateSpecies(raw: unknown, file: string, index: number): SpeciesDef 
   if (typeof r.emoji !== 'string') throw new PackError(file, `${path}.emoji`, 'must be a string');
   if (typeof r.label !== 'string') throw new PackError(file, `${path}.label`, 'must be a string');
   if (typeof r.placeable !== 'boolean') throw new PackError(file, `${path}.placeable`, 'must be a boolean');
+  if (r.migrate !== undefined) {
+    const m = r.migrate as Record<string, unknown>;
+    if (typeof m !== 'object' || m === null) {
+      throw new PackError(file, `${path}.migrate`, 'must be an object');
+    }
+    if (typeof m.chance !== 'number') {
+      throw new PackError(file, `${path}.migrate.chance`, 'must be a number');
+    }
+    if (m.whenBelow !== undefined && typeof m.whenBelow !== 'number') {
+      throw new PackError(file, `${path}.migrate.whenBelow`, 'must be a number');
+    }
+    if (m.needsDiet !== undefined && typeof m.needsDiet !== 'number') {
+      throw new PackError(file, `${path}.migrate.needsDiet`, 'must be a number');
+    }
+  }
   return r as unknown as SpeciesDef;
 }
 

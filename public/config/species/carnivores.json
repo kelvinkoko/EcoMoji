@@ -12,7 +12,8 @@
     "energyPerTick": 2,
     "reproThreshold": 22,
     "lifespan": 70,
-    "speed": 1
+    "speed": 1,
+    "migrate": { "chance": 0.006, "needsDiet": 3 }
   },
   {
     "id": "wolf",
@@ -27,7 +28,8 @@
     "energyPerTick": 3,
     "reproThreshold": 30,
     "lifespan": 80,
-    "speed": 1
+    "speed": 1,
+    "migrate": { "chance": 0.005, "needsDiet": 4 }
   },
   {
     "id": "eagle",
@@ -42,7 +44,8 @@
     "energyPerTick": 2,
     "reproThreshold": 26,
     "lifespan": 80,
-    "speed": 2
+    "speed": 2,
+    "migrate": { "chance": 0.005, "needsDiet": 4 }
   },
   {
     "id": "snake",
@@ -57,7 +60,8 @@
     "energyPerTick": 1,
     "reproThreshold": 18,
     "lifespan": 60,
-    "speed": 1
+    "speed": 1,
+    "migrate": { "chance": 0.006, "needsDiet": 3 }
   },
   {
     "id": "bear",
@@ -72,6 +76,7 @@
     "energyPerTick": 3,
     "reproThreshold": 36,
     "lifespan": 110,
-    "speed": 1
+    "speed": 1,
+    "migrate": { "chance": 0.004, "needsDiet": 5 }
   }
 ]

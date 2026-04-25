@@ -12,7 +12,8 @@
     "energyPerTick": 1,
     "reproThreshold": 14,
     "lifespan": 50,
-    "speed": 1
+    "speed": 1,
+    "migrate": { "chance": 0.012, "needsDiet": 6 }
   },
   {
     "id": "snail",
@@ -27,7 +28,8 @@
     "energyPerTick": 0,
     "reproThreshold": 10,
     "lifespan": 80,
-    "speed": 1
+    "speed": 1,
+    "migrate": { "chance": 0.010, "needsDiet": 5 }
   },
   {
     "id": "deer",
@@ -42,7 +44,8 @@
     "energyPerTick": 1,
     "reproThreshold": 22,
     "lifespan": 90,
-    "speed": 1
+    "speed": 1,
+    "migrate": { "chance": 0.008, "needsDiet": 4 }
   },
   {
     "id": "mouse",
@@ -57,7 +60,8 @@
     "energyPerTick": 1,
     "reproThreshold": 8,
     "lifespan": 30,
-    "speed": 1
+    "speed": 1,
+    "migrate": { "chance": 0.012, "needsDiet": 6 }
   },
   {
     "id": "turtle",
@@ -72,6 +76,7 @@
     "energyPerTick": 0,
     "reproThreshold": 18,
     "lifespan": 200,
-    "speed": 1
+    "speed": 1,
+    "migrate": { "chance": 0.008, "needsDiet": 4 }
   }
 ]
