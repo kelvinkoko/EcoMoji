@@ -16,11 +16,17 @@
   ],
   "plantsNearWater": [
     { "speciesId": "sapling", "count": 14 },
-    { "speciesId": "bush", "count": 6 }
+    { "speciesId": "bush", "count": 6 },
+    { "speciesId": "palm", "count": 4 },
+    { "speciesId": "hyacinth", "count": 6 }
   ],
   "scatter": [
-    { "speciesId": "flower", "count": 26 },
-    { "speciesId": "mushroom", "count": 14 },
+    { "speciesId": "flower", "count": 22 },
+    { "speciesId": "mushroom", "count": 12 },
+    { "speciesId": "tulip", "count": 8 },
+    { "speciesId": "sunflower", "count": 6 },
+    { "speciesId": "pine", "count": 6 },
+    { "speciesId": "cactus", "count": 5 },
     { "speciesId": "rabbit", "count": 12 },
     { "speciesId": "mouse", "count": 12 },
     { "speciesId": "snail", "count": 7 },

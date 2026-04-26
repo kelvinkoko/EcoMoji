@@ -64,5 +64,83 @@
     "matureAge": 5,
     "energyStart": 2,
     "lifespan": 60
+  },
+  {
+    "id": "cactus",
+    "emoji": "🌵",
+    "label": "Cactus",
+    "group": "plant",
+    "role": "producer",
+    "placeable": true,
+    "needs": { "sun": true },
+    "spreadChance": 0.03,
+    "matureAge": 8,
+    "energyStart": 4,
+    "lifespan": 200
+  },
+  {
+    "id": "pine",
+    "emoji": "🌲",
+    "label": "Pine",
+    "group": "plant",
+    "role": "producer",
+    "placeable": true,
+    "needs": { "sun": true },
+    "spreadChance": 0.04,
+    "matureAge": 18,
+    "energyStart": 5,
+    "lifespan": 220
+  },
+  {
+    "id": "palm",
+    "emoji": "🌴",
+    "label": "Palm",
+    "group": "plant",
+    "role": "producer",
+    "placeable": true,
+    "needs": { "sun": true, "waterNeighbor": true },
+    "spreadChance": 0.04,
+    "matureAge": 15,
+    "energyStart": 5,
+    "lifespan": 180
+  },
+  {
+    "id": "hyacinth",
+    "emoji": "🪻",
+    "label": "Hyacinth",
+    "group": "plant",
+    "role": "producer",
+    "placeable": true,
+    "needs": { "sun": true, "waterNeighbor": true },
+    "spreadChance": 0.06,
+    "matureAge": 4,
+    "energyStart": 2,
+    "lifespan": 60
+  },
+  {
+    "id": "sunflower",
+    "emoji": "🌻",
+    "label": "Sunflower",
+    "group": "plant",
+    "role": "producer",
+    "placeable": true,
+    "needs": { "sun": true },
+    "spreadChance": 0.04,
+    "matureAge": 5,
+    "energyStart": 3,
+    "lifespan": 60
+  },
+  {
+    "id": "tulip",
+    "emoji": "🌷",
+    "label": "Tulip",
+    "group": "plant",
+    "role": "producer",
+    "placeable": true,
+    "needs": { "sun": true },
+    "spreadChance": 0.06,
+    "matureAge": 4,
+    "energyStart": 2,
+    "lifespan": 50
   }
 ]
