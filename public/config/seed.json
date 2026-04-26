@@ -1,33 +1,38 @@
 {
   "waterClusters": [
-    { "center": [-0.6, -0.3], "size": 7 },
-    { "center": [0.6, 0.3], "size": 6 },
-    { "center": [0.0, 0.65], "size": 5 },
-    { "center": [-0.2, -0.7], "size": 3 }
+    { "center": [-0.55, -0.25], "size": 12 },
+    { "center": [0.55, 0.25], "size": 12 },
+    { "center": [0.0, 0.6], "size": 10 },
+    { "center": [-0.35, -0.7], "size": 6 },
+    { "center": [0.7, -0.45], "size": 6 },
+    { "center": [-0.6, 0.55], "size": 6 }
   ],
-  "rocks": 10,
+  "rocks": 12,
   "forests": [
-    { "center": [0.4, -0.6], "size": 11, "speciesId": "tree" },
-    { "center": [-0.7, 0.4], "size": 10, "speciesId": "tree" },
-    { "center": [0.2, 0.4], "size": 8, "speciesId": "tree" },
-    { "center": [-0.4, -0.5], "size": 5, "speciesId": "bush" }
+    { "center": [0.4, -0.55], "size": 14, "speciesId": "tree" },
+    { "center": [-0.7, 0.45], "size": 12, "speciesId": "tree" },
+    { "center": [0.2, 0.45], "size": 8, "speciesId": "tree" },
+    { "center": [-0.4, -0.5], "size": 6, "speciesId": "bush" }
   ],
   "plantsNearWater": [
-    { "speciesId": "sapling", "count": 8 },
-    { "speciesId": "bush", "count": 4 }
+    { "speciesId": "sapling", "count": 14 },
+    { "speciesId": "bush", "count": 6 }
   ],
   "scatter": [
-    { "speciesId": "flower", "count": 18 },
-    { "speciesId": "mushroom", "count": 10 },
-    { "speciesId": "rabbit", "count": 9 },
-    { "speciesId": "mouse", "count": 9 },
-    { "speciesId": "snail", "count": 6 },
-    { "speciesId": "deer", "count": 4 },
-    { "speciesId": "turtle", "count": 4 },
+    { "speciesId": "flower", "count": 26 },
+    { "speciesId": "mushroom", "count": 14 },
+    { "speciesId": "rabbit", "count": 12 },
+    { "speciesId": "mouse", "count": 12 },
+    { "speciesId": "snail", "count": 7 },
+    { "speciesId": "deer", "count": 6 },
+    { "speciesId": "turtle", "count": 5 },
     { "speciesId": "fox", "count": 2 },
     { "speciesId": "snake", "count": 2 },
-    { "speciesId": "bear", "count": 2 },
-    { "speciesId": "coral", "count": 14 },
-    { "speciesId": "fish", "count": 8 }
+    { "speciesId": "wolf", "count": 1 },
+    { "speciesId": "eagle", "count": 1 },
+    { "speciesId": "bear", "count": 1 },
+    { "speciesId": "coral", "count": 30 },
+    { "speciesId": "fish", "count": 12 },
+    { "speciesId": "shark", "count": 1 }
   ]
 }

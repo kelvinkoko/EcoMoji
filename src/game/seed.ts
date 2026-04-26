@@ -61,7 +61,7 @@ export function applySeed(world: World, seed: SeedDef, registry: Registry, rng: 
     while (placed < item.count && attempts < 500) {
       attempts++;
       const spot = pickRandomHabitatTile(next, rng, 1, 'grass');
-      if (!spot) break;
+      if (!spot) continue;
       if (!hasWaterNeighbor(next, spot)) continue;
       if (placeCreature(spot, item.speciesId)) placed++;
     }
@@ -76,7 +76,7 @@ export function applySeed(world: World, seed: SeedDef, registry: Registry, rng: 
     while (placed < item.count && attempts < 500) {
       attempts++;
       const spot = pickRandomHabitatTile(next, rng, 1, habitat);
-      if (!spot) break;
+      if (!spot) continue;
       if (placeCreature(spot, item.speciesId)) placed++;
     }
   }
