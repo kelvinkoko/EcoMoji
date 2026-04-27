@@ -78,5 +78,37 @@
     "lifespan": 110,
     "speed": 1,
     "migrate": { "chance": 0.004, "needsDiet": 5 }
+  },
+  {
+    "id": "leopard",
+    "emoji": "🐆",
+    "label": "Leopard",
+    "group": "carnivore",
+    "role": "consumer",
+    "placeable": true,
+    "diet": ["rabbit", "deer", "fox", "snake", "pig", "ram", "donkey", "llama"],
+    "energyStart": 14,
+    "energyPerEat": 11,
+    "energyPerTick": 2,
+    "reproThreshold": 22,
+    "lifespan": 80,
+    "speed": 1,
+    "migrate": { "chance": 0.005, "needsDiet": 4 }
+  },
+  {
+    "id": "tiger",
+    "emoji": "🐅",
+    "label": "Tiger",
+    "group": "carnivore",
+    "role": "consumer",
+    "placeable": true,
+    "diet": ["deer", "rabbit", "fox", "wolf", "pig", "cow", "ox", "ram", "donkey", "zebra", "leopard", "buffalo", "camel"],
+    "energyStart": 20,
+    "energyPerEat": 16,
+    "energyPerTick": 3,
+    "reproThreshold": 32,
+    "lifespan": 100,
+    "speed": 1,
+    "migrate": { "chance": 0.004, "needsDiet": 5 }
   }
 ]
