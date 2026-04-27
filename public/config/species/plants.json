@@ -74,7 +74,7 @@
     "placeable": true,
     "habitat": "rock",
     "needs": { "sun": true },
-    "spreadChance": 0.03,
+    "spreadChance": 0.015,
     "matureAge": 8,
     "energyStart": 4,
     "lifespan": 200
