@@ -4,16 +4,20 @@ import type { SpeciesDef } from '../game/types';
 export function describeSpecies(def: SpeciesDef, registry: Registry): string[] {
   const lines: string[] = [];
 
-  const aquatic = (def.habitat ?? 'grass') === 'water';
+  const habitat = def.habitat ?? 'grass';
+  const aquatic = habitat === 'water';
+  const lithic = habitat === 'rock';
 
   switch (def.role) {
     case 'producer': {
-      const head: string[] = [aquatic ? 'Aquatic plant' : 'Plant'];
+      const head: string[] = [aquatic ? 'Aquatic plant' : lithic ? 'Desert plant' : 'Plant'];
       if (def.spreadChance && def.spreadChance >= 0.06) head.push('spreads quickly');
       else if (def.spreadChance) head.push('spreads slowly');
       lines.push(head.join(' · '));
       if (aquatic) {
         lines.push('Lives in 💧 water');
+      } else if (lithic) {
+        lines.push('Lives on 🪨 rock');
       } else {
         lines.push(def.needs?.waterNeighbor ? 'Needs water nearby' : 'Drought-tolerant');
       }
@@ -80,7 +84,8 @@ export function describeSpecies(def: SpeciesDef, registry: Registry): string[] {
         lines.push('Edges dry under clear skies');
       } else if (def.terrain === 'rock') {
         lines.push('Rock tile');
-        lines.push('Nothing can live on it');
+        lines.push('Spreads under sun, erodes under rain');
+        lines.push('🌵 Cactus thrives here');
       } else if (def.id === 'fire') {
         lines.push('Burns plants and spreads to neighbors');
         lines.push('Started by lightning during storms');

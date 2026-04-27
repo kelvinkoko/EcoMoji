@@ -90,8 +90,40 @@ export function tickAtmosphere(world: World, registry: Registry, rng: RNG): Worl
       }
     }
     if (!shoreline) continue;
-    const dryChance = aboveId === 'cloud' ? 0.012 : 0.025;
+    const dryChance = aboveId === 'cloud' ? 0.005 : 0.010;
     if (!rng.chance(dryChance)) continue;
+    updates.push({ kind: 'setTerrain', pos, terrain: 'grass', layer: 'tile' });
+  }
+
+  for (let i = 0; i < world.tiles.length; i++) {
+    const t = world.tiles[i];
+    if (!t || t.terrain !== 'grass') continue;
+    if (t.creature) continue;
+    const aboveId = world.atmosphere[i]?.speciesId;
+    if (aboveId === 'rain' || aboveId === 'storm') continue;
+    const pos = decode(world.radius, i);
+    let frontier = false;
+    for (const n of neighbors(world, pos)) {
+      if (getTile(world, n.q, n.r)?.terrain === 'rock') {
+        frontier = true;
+        break;
+      }
+    }
+    if (!frontier) continue;
+    const dryChance = aboveId === 'cloud' ? 0.004 : 0.008;
+    if (!rng.chance(dryChance)) continue;
+    updates.push({ kind: 'setTerrain', pos, terrain: 'rock', layer: 'tile' });
+  }
+
+  for (let i = 0; i < world.tiles.length; i++) {
+    const t = world.tiles[i];
+    if (!t || t.terrain !== 'rock') continue;
+    if (t.creature) continue;
+    const aboveId = world.atmosphere[i]?.speciesId;
+    if (aboveId !== 'rain' && aboveId !== 'storm') continue;
+    const wetChance = aboveId === 'storm' ? 0.030 : 0.018;
+    if (!rng.chance(wetChance)) continue;
+    const pos = decode(world.radius, i);
     updates.push({ kind: 'setTerrain', pos, terrain: 'grass', layer: 'tile' });
   }
 

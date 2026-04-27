@@ -7,7 +7,7 @@
     { "center": [0.7, -0.45], "size": 6 },
     { "center": [-0.6, 0.55], "size": 6 }
   ],
-  "rocks": 12,
+  "rocks": 16,
   "forests": [
     { "center": [0.4, -0.55], "size": 14, "speciesId": "tree" },
     { "center": [-0.7, 0.45], "size": 12, "speciesId": "tree" },

@@ -72,6 +72,7 @@
     "group": "plant",
     "role": "producer",
     "placeable": true,
+    "habitat": "rock",
     "needs": { "sun": true },
     "spreadChance": 0.03,
     "matureAge": 8,
