@@ -68,6 +68,7 @@ export interface SeedForest {
 
 export interface SeedDef {
   waterClusters?: SeedWaterCluster[];
+  rockClusters?: SeedWaterCluster[];
   rocks?: number;
   forests?: SeedForest[];
   plantsNearWater?: SeedScatter[];

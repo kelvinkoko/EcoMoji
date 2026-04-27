@@ -78,5 +78,22 @@
     "lifespan": 200,
     "speed": 1,
     "migrate": { "chance": 0.008, "needsDiet": 4 }
+  },
+  {
+    "id": "camel",
+    "emoji": "🐪",
+    "label": "Camel",
+    "group": "herbivore",
+    "role": "consumer",
+    "placeable": true,
+    "habitat": "rock",
+    "diet": ["cactus"],
+    "energyStart": 12,
+    "energyPerEat": 8,
+    "energyPerTick": 1,
+    "reproThreshold": 18,
+    "lifespan": 120,
+    "speed": 1,
+    "migrate": { "chance": 0.008, "needsDiet": 4 }
   }
 ]

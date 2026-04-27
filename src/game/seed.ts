@@ -36,6 +36,16 @@ export function applySeed(world: World, seed: SeedDef, registry: Registry, rng: 
     growBlob(next, start, tilesToFill, rng).forEach((p) => setTerrain(p, 'water'));
   }
 
+  for (const cluster of seed.rockClusters ?? []) {
+    const cq = toAxial(cluster.center[0], next.radius);
+    const cr = toAxial(cluster.center[1], next.radius);
+    const start = clampToDisc(next.radius, cq, cr);
+    const tilesToFill = Math.max(1, cluster.size ?? 4);
+    for (const p of growBlob(next, start, tilesToFill, rng)) {
+      if (getTile(next, p.q, p.r)?.terrain === 'grass') setTerrain(p, 'rock');
+    }
+  }
+
   const rockCount = seed.rocks ?? 0;
   for (let i = 0; i < rockCount; i++) {
     const spot = pickRandomHabitatTile(next, rng, 200, 'grass');

@@ -7,7 +7,11 @@
     { "center": [0.7, -0.45], "size": 6 },
     { "center": [-0.6, 0.55], "size": 6 }
   ],
-  "rocks": 16,
+  "rockClusters": [
+    { "center": [0.65, -0.05], "size": 14 },
+    { "center": [-0.85, -0.1], "size": 8 }
+  ],
+  "rocks": 8,
   "forests": [
     { "center": [0.4, -0.55], "size": 14, "speciesId": "tree" },
     { "center": [-0.7, 0.45], "size": 12, "speciesId": "tree" },
@@ -26,7 +30,8 @@
     { "speciesId": "tulip", "count": 8 },
     { "speciesId": "sunflower", "count": 6 },
     { "speciesId": "pine", "count": 6 },
-    { "speciesId": "cactus", "count": 3 },
+    { "speciesId": "cactus", "count": 8 },
+    { "speciesId": "camel", "count": 4 },
     { "speciesId": "rabbit", "count": 12 },
     { "speciesId": "mouse", "count": 12 },
     { "speciesId": "snail", "count": 7 },

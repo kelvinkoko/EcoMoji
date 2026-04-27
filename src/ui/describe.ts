@@ -38,8 +38,10 @@ export function describeSpecies(def: SpeciesDef, registry: Registry): string[] {
         (def.diet ?? []).every((id) => registry.species(id)?.role === 'producer');
       const grazes = (def.diet ?? []).length > 0 && preyAreProducers;
       const role = grazes ? 'Herbivore' : 'Carnivore';
-      lines.push(aquatic ? `Aquatic ${role.toLowerCase()}` : role);
+      const prefix = aquatic ? 'Aquatic ' : lithic ? 'Desert ' : '';
+      lines.push(prefix ? `${prefix}${role.toLowerCase()}` : role);
       if (aquatic) lines.push('Lives in 💧 water');
+      else if (lithic) lines.push('Lives on 🪨 rock');
       if (def.diet && def.diet.length > 0) {
         const prey = def.diet
           .map((id) => registry.species(id))
